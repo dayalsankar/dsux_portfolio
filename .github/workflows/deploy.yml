@@ -1,0 +1,66 @@
+name: Deploy to S3 + CloudFront
+
+# Deploys the static portfolio to S3 and invalidates CloudFront on every push to main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Static assets (images, js, css, fonts, pdf) — cache hard, they are versioned by content/edits.
+      - name: Sync static assets (long cache)
+        run: |
+          aws s3 sync . "s3://${S3_BUCKET}" \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude ".claude/*" \
+            --exclude ".vscode/*" \
+            --exclude "Case study Zip file/*" \
+            --exclude "Figma PDF/*" \
+            --exclude "*.md" \
+            --exclude "serve.py" \
+            --exclude "*.html" \
+            --exclude "*.DS_Store" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      # HTML last — short cache so edits show up immediately after an invalidation.
+      - name: Sync HTML (no cache)
+        run: |
+          aws s3 sync . "s3://${S3_BUCKET}" \
+            --exclude "*" \
+            --include "*.html" \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --content-type "text/html; charset=utf-8" \
+            --cache-control "public, max-age=0, must-revalidate"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*"
