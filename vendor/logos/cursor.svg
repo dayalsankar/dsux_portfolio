@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cursor — isometric cube mark -->
+  <path d="M50 8 L88 30 L50 52 L12 30 Z" fill="#e8e8e8"/>
+  <path d="M88 30 L88 70 L50 92 L50 52 Z" fill="#bdbdbd"/>
+  <path d="M12 30 L50 52 L50 92 L12 70 Z" fill="#8a8a8a"/>
+  <path d="M50 8 L88 30 L50 52 L12 30 Z M88 30 L88 70 L50 92 L50 52 M12 30 L50 52 L50 92" fill="none" stroke="#5a5a5a" stroke-width="2" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shatila Bakery Factory · Staff Dashboard · UX/UI Case Study · DAYAL·WORLD</title>
+  <meta name="description" content="A UX/UI case study: designing the first digital staff operations dashboard for Shatila Bakery Factory, a 40-year-old Lebanese-American sweets factory in Dearborn, Michigan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Oswald:wght@500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+  /* =========================================================================
+     Shatila Bakery Factory · Staff Dashboard · UX/UI case study
+     Same design DNA as Tractor Connect 2.0 — Fraunces + DM Sans + Oswald,
+     dark immersive glass aesthetic — re-skinned to Shatila's warm amber.
+     ========================================================================= */
+  :root {
+    /* portfolio DNA */
+    --ink: #f4efe6;
+    --ink-dim: rgba(244, 239, 230, 0.60);
+    --ink-faint: rgba(244, 239, 230, 0.34);
+    --bg: #0d0b09;                  /* near-black, faintly warm */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Shatila brand tokens (this page only) */
+    --accent: #D4A853;             /* warm amber · the dominant accent */
+    --accent-deep: #b58a3c;
+    --accent-light: rgba(212, 168, 83, 0.10);
+    --navy: #1d1813;               /* warm dark surface */
+    --green: #5FB97A;
+    --amber: #E8A430;
+    --red: #E04040;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.07);
+
+    /* type system (matches Tractor) */
+    --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+
+    /* spacing scale · 4/8pt rhythm */
+    --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
+    --sp-5: 1.25rem; --sp-6: 1.5rem; --sp-7: 2rem; --sp-8: 2.5rem; --sp-9: 3rem;
+    --gutter: clamp(1.4rem, 6vw, 6rem);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root { --topbar-h: 66px; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--topbar-h) + 60px); }
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* warm-grain vignette over the whole page */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(120% 80% at 12% -10%, rgba(212, 168, 83, 0.10), transparent 55%),
+      radial-gradient(80% 60% at 100% 110%, rgba(29, 24, 19, 0.55), transparent 60%);
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ----------------------------- typography ----------------------------- */
+  .kicker, .lm-index {
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: var(--sp-6);
+    display: inline-block;
+  }
+  .dt-tag { color: #9b9186; font-weight: 500; }
+  .mega {
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+  }
+  h2.big, .h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4.4vw, 3.4rem);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--sp-6);
+    max-width: 22ch;
+  }
+  h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+    line-height: 1.2;
+    margin-bottom: var(--sp-3);
+  }
+  p { color: var(--ink-dim); max-width: 64ch; }
+  p + p { margin-top: var(--sp-4); }
+  strong { color: var(--ink); font-weight: 600; }
+  .accent { color: var(--accent); }
+  .metric { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* ----------------------------- topbar ----------------------------- */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: var(--sp-4) var(--gutter);
+    background: linear-gradient(180deg, rgba(13, 11, 9, 0.82), rgba(13, 11, 9, 0));
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+  }
+  .tb-back {
+    justify-self: start;
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    color: var(--ink); text-decoration: none;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.02em;
+    padding: var(--sp-2) var(--sp-4);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    transition: transform 0.3s var(--ease), border-color 0.3s ease, background 0.3s ease;
+  }
+  .tb-back:hover { transform: translateX(-2px); border-color: var(--accent); background: var(--accent-light); }
+  .tb-brand {
+    justify-self: center;
+    font-family: "Fraunces", serif; font-weight: 600;
+    letter-spacing: 0.16em; font-size: 0.95rem; color: var(--ink);
+    text-decoration: none; white-space: nowrap;
+  }
+  .tb-brand span { opacity: 0.45; margin: 0 0.15em; }
+  .tb-tag {
+    justify-self: end;
+    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+    color: var(--accent);
+    padding: var(--sp-1) var(--sp-3);
+    border-radius: 999px;
+    background: var(--accent-light);
+    border: 1px solid rgba(212, 168, 83, 0.35);
+    white-space: nowrap;
+  }
+
+  /* ----------------------------- section sub-nav ----------------------------- */
+  .subnav {
+    position: fixed; top: var(--topbar-h); left: 0; right: 0; z-index: 49;
+    background: rgba(13, 11, 9, 0.72);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .subnav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; gap: var(--sp-1); align-items: center; justify-content: center;
+    padding: 0 var(--gutter);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .subnav-inner::-webkit-scrollbar { display: none; }
+  .subnav a {
+    position: relative; flex: none;
+    padding: var(--sp-4) var(--sp-3);
+    font-family: var(--font-display); font-weight: 500;
+    font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-faint); text-decoration: none; white-space: nowrap;
+    transition: color 0.25s var(--ease);
+  }
+  .subnav a:hover { color: var(--ink); }
+  .subnav a::after {
+    content: ""; position: absolute; left: var(--sp-3); right: var(--sp-3); bottom: 0;
+    height: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: center;
+    transition: transform 0.3s var(--ease);
+  }
+  .subnav a.active { color: var(--accent); }
+  .subnav a.active::after { transform: scaleX(1); }
+
+  /* ----------------------------- layout ----------------------------- */
+  section { padding: clamp(4rem, 10vh, 8rem) var(--gutter); position: relative; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink-dim); max-width: 56ch; }
+  .section-divider { border: none; border-top: 1px solid var(--card-border); max-width: 1200px; margin: 0 auto; }
+
+  /* reveal-on-scroll */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: 0.08s; } .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; } .reveal.d4 { transition-delay: 0.32s; }
+
+  /* ----------------------------- cards ----------------------------- */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: clamp(1.4rem, 2.6vw, 2.2rem);
+  }
+  .card--glass { backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); }
+  .card--left { border-left: 3px solid var(--accent); }
+  .card h3 + p { margin-top: var(--sp-2); }
+
+  .cs-card { display: flex; flex-direction: column; gap: var(--sp-2); text-decoration: none; color: inherit; transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), background 0.2s var(--ease); }
+  .cs-card:hover { border-color: var(--accent); transform: translateY(-4px); background: var(--accent-light); }
+  .cs-card h3 { font-size: 1.3rem; }
+  .cs-card p { color: var(--ink-dim); font-size: 0.95rem; line-height: 1.55; }
+  .cs-card .cs-link { color: var(--accent); font-weight: 500; font-size: 0.85rem; margin-top: var(--sp-2); }
+
+  .grid { display: grid; gap: var(--sp-6); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-5 { grid-template-columns: repeat(5, 1fr); }
+  .span-2 { grid-column: span 2; }
+
+  /* meta / brief strips with thin dividers */
+  .meta {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden;
+    background: var(--card-bg);
+  }
+  .meta > div { padding: var(--sp-5) var(--sp-5); border-left: 1px solid var(--card-border); }
+  .meta > div:first-child { border-left: none; }
+  .meta .k { font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: var(--sp-2); }
+  .meta .v { color: var(--ink); font-weight: 500; font-size: 0.95rem; }
+
+  /* big Fraunces stat numbers */
+  .stat-num {
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1; color: var(--accent);
+    display: block;
+  }
+  .stat-label { font-size: 0.82rem; color: var(--ink-dim); margin-top: var(--sp-3); display: block; }
+
+  /* ghost numbered cards */
+  .ghost-card { position: relative; overflow: hidden; }
+  .ghost-num {
+    position: absolute; top: -0.3em; right: 0.1em;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: 7rem; line-height: 1; color: rgba(212, 168, 83, 0.12);
+    pointer-events: none; user-select: none;
+  }
+  .ghost-card > * { position: relative; }
+  .ghost-card .ic { width: 30px; height: 30px; color: var(--accent); margin-bottom: var(--sp-4); }
+
+  /* finding tag */
+  .finding-tag { display:inline-block; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; color:var(--accent); background:rgba(212,168,83,.12); border:1px solid rgba(212,168,83,.4); border-radius:999px; padding:3px 10px; margin-bottom:var(--sp-3); }
+
+  /* small method cards row */
+  .method { text-align: center; }
+  .method .m-no { font-family: "Fraunces", serif; font-weight: 900; color: rgba(212,168,83,0.55); font-size: 1.2rem; display: block; margin-bottom: var(--sp-2); }
+  .method .m-name { font-family: var(--font-display); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.82rem; color: var(--ink); }
+
+  /* ----------------------------- personas ----------------------------- */
+  .persona { border-top: 4px solid var(--p, var(--accent)); }
+  .persona .p-name { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.5rem; color: var(--ink); }
+  .persona .p-meta { font-size: 0.8rem; color: var(--ink-dim); margin: var(--sp-2) 0 var(--sp-4); }
+  .persona blockquote {
+    font-family: "Fraunces", serif; font-style: italic; font-weight: 400;
+    color: var(--ink); font-size: 1.05rem; line-height: 1.4;
+    border-left: 2px solid var(--p, var(--accent)); padding-left: var(--sp-4); margin: var(--sp-5) 0;
+  }
+  .persona h4 { font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--p, var(--accent)); margin: var(--sp-5) 0 var(--sp-2); }
+  .persona p { font-size: 0.9rem; }
+
+  /* ----------------------------- pull quotes ----------------------------- */
+  .pull { position: relative; padding: var(--sp-7) var(--sp-6) var(--sp-6) clamp(2.6rem, 5vw, 4rem); }
+  .pull::before {
+    content: "\201C"; position: absolute; left: 0; top: -0.1em;
+    font-family: "Fraunces", serif; font-weight: 900; font-size: 5rem; line-height: 1; color: var(--accent);
+  }
+  .pull p { font-family: "Fraunces", serif; font-style: italic; color: var(--ink); font-size: clamp(1.2rem, 2.6vw, 1.9rem); line-height: 1.35; max-width: 30ch; }
+
+  /* ----------------------------- HMW tag cloud ----------------------------- */
+  .hmw-filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-6); }
+  .hmw-filter {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+    color: var(--ink-dim); background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 999px; padding: var(--sp-2) var(--sp-4); cursor: pointer;
+    transition: all 0.25s var(--ease);
+  }
+  .hmw-filter:hover { color: var(--ink); }
+  .hmw-filter.active { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+  .hmw-cloud { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .hmw {
+    font-size: 0.95rem; color: var(--ink); line-height: 1.4;
+    background: var(--accent-light); border: 1px solid rgba(212, 168, 83, 0.28);
+    border-radius: 12px; padding: var(--sp-3) var(--sp-4); max-width: 42ch;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .hmw .hmw-theme { display: block; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-1); }
+  .hmw.hide { display: none; }
+
+  /* ----------------------------- impact / MoSCoW matrix ----------------------------- */
+  .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+  .quad { border: 1px solid var(--card-border); border-radius: 16px; padding: var(--sp-5); background: var(--card-bg); }
+  .quad.q1 { border-color: rgba(212,168,83,0.5); }
+  .quad h4 { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-2); }
+  .quad .q-sub { font-size: 0.7rem; color: var(--ink-faint); display: block; margin-bottom: var(--sp-4); }
+  .feature-pills { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .feature-pills span { font-size: 0.78rem; color: var(--ink); background: rgba(255,255,255,0.04); border: 1px solid var(--card-border); border-radius: 999px; padding: var(--sp-1) var(--sp-3); }
+  .quad.q1 .feature-pills span { border-color: rgba(212,168,83,0.4); background: var(--accent-light); }
+
+  /* ----------------------------- design-decision blocks ----------------------------- */
+  .decision { margin-bottom: var(--sp-6); }
+  .decision .d-head { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.35rem; color: var(--ink); display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+  .decision .d-num { font-family: "Fraunces", serif; font-weight: 900; color: rgba(212,168,83,0.55); font-size: 1.5rem; flex: none; }
+  .d-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--sp-5); padding: var(--sp-4) 0; border-top: 1px solid var(--card-border); }
+  .d-row .d-lbl { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 600; padding-top: 2px; }
+  .d-row .d-val { color: var(--ink-dim); font-size: 0.95rem; line-height: 1.55; }
+
+  /* ----------------------------- screens accordion ----------------------------- */
+  .screen-head { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.25rem; color: var(--ink); padding-bottom: var(--sp-3); margin-bottom: var(--sp-5); border-bottom: 1px solid rgba(212,168,83,0.35); }
+  .acc { border: 1px solid var(--card-border); border-radius: 14px; overflow: hidden; margin-bottom: var(--sp-3); background: var(--card-bg); }
+  .acc-btn {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
+    padding: var(--sp-4) var(--sp-5); background: none; border: none; cursor: pointer;
+    color: var(--ink); font-family: var(--font-display); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    font-size: 0.86rem; text-align: left;
+  }
+  .acc-btn .chev { color: var(--accent); transition: transform 0.3s var(--ease); flex: none; }
+  .acc.open .acc-btn .chev { transform: rotate(90deg); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease); }
+  .acc-body-inner { padding: 0 var(--sp-5) var(--sp-4); }
+  .mod-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-3) 0; border-top: 1px solid var(--card-border); font-size: 0.92rem; color: var(--ink-dim); }
+
+  /* status pills */
+  .pill { display: inline-block; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; padding: 3px 10px; border-radius: 999px; flex: none; }
+  .pill.g { color: var(--green); background: rgba(95,185,122,0.12); border: 1px solid rgba(95,185,122,0.4); }
+
+  /* learnings */
+  .learn h3 { font-style: italic; }
+  .learn p { font-size: 0.98rem; }
+
+  /* ----------------------------- HERO ----------------------------- */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding-top: clamp(7rem, 16vh, 10rem); position: relative; overflow: hidden;
+  }
+  .hero-mark {
+    position: absolute; right: -2%; bottom: 6%; width: min(44vw, 600px); height: auto;
+    opacity: 0.05; color: var(--accent); pointer-events: none; z-index: 0;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero h1 { font-size: clamp(3.6rem, 14vw, 8rem); margin: var(--sp-4) 0 var(--sp-7); }
+  .hero h1 .l { display: block; }
+  .hero h1 .l-accent { color: var(--accent); }
+  .hero h1 .l-ghost { color: transparent; -webkit-text-stroke: 1.5px rgba(244, 239, 230, 0.45); }
+  .hero .lede { margin-bottom: var(--sp-8); }
+
+  /* footer */
+  .footer { text-align: center; padding: clamp(5rem, 14vh, 9rem) var(--gutter); }
+  .footer a.big-cta {
+    font-family: "Fraunces", serif; font-weight: 900; letter-spacing: -0.01em;
+    font-size: clamp(2.4rem, 7vw, 5rem); color: var(--ink); text-decoration: none;
+    display: inline-block; transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .footer a.big-cta:hover { color: var(--accent); transform: translateX(-6px); }
+  .footer .subline { color: var(--ink-dim); font-size: 0.84rem; margin: var(--sp-6) auto 0; max-width: 60ch; letter-spacing: 0.04em; }
+  .footer .disclaimer { color: var(--ink-faint); font-size: 0.72rem; font-style: italic; line-height: 1.6; margin: var(--sp-6) auto 0; max-width: 62ch; }
+  .footer .built { color: var(--ink-faint); font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; margin: var(--sp-5) auto 0; max-width: 48ch; }
+
+  /* ----------------------------- responsive ----------------------------- */
+  @media (max-width: 1024px) {
+    .grid-5, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    :root { --topbar-h: 56px; }
+    .topbar { grid-template-columns: auto 1fr; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); }
+    .tb-brand { display: none; }
+    .tb-tag { font-size: 0.6rem; }
+    .subnav-inner { justify-content: flex-start; padding: 0 var(--sp-4); }
+    .subnav a { padding: var(--sp-3) var(--sp-3); font-size: 0.68rem; }
+    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+    .span-2 { grid-column: auto; }
+    .meta { grid-template-columns: 1fr 1fr; }
+    .meta > div:nth-child(3) { border-left: none; }
+    .matrix { grid-template-columns: 1fr; }
+    .d-row { grid-template-columns: 1fr; gap: var(--sp-1); }
+    h2.big { max-width: none; }
+    .hero h1 { font-size: clamp(3rem, 18vw, 5.5rem); }
+    .ghost-num { font-size: 5rem; }
+  }
+  @media (max-width: 480px) {
+    :root { --gutter: 1.2rem; }
+    .meta { grid-template-columns: 1fr; }
+    .meta > div { border-left: none; border-top: 1px solid var(--card-border); }
+    .meta > div:first-child { border-top: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transition: opacity 0.3s; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ----------------------------- scroll-to-top ----------------------------- */
+  .to-top {
+    position: fixed; right: clamp(1rem, 4vw, 2.2rem); bottom: clamp(1rem, 4vw, 2.2rem);
+    z-index: 60; width: 48px; height: 48px; display: grid; place-items: center;
+    border-radius: 50%; cursor: pointer;
+    color: var(--ink); background: rgba(212, 168, 83, 0.16);
+    border: 1px solid rgba(212, 168, 83, 0.5);
+    backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);
+    opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.9);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), background 0.2s, visibility 0.4s;
+  }
+  .to-top.show { opacity: 1; visibility: visible; transform: none; }
+  .to-top:hover { background: var(--accent); color: #fff; }
+  .to-top svg { width: 20px; height: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- ============ TOPBAR ============ -->
+  <header class="topbar">
+    <a class="tb-back" href="index.html#shatila">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Back to <span class="accent">work</span>
+    </a>
+    <a class="tb-brand" href="index.html">DAYAL<span>·</span>WORLD</a>
+    <span class="tb-tag">04 · Case Study</span>
+  </header>
+
+  <!-- ============ SECTION SUB-NAV ============ -->
+  <nav class="subnav" aria-label="Case study sections">
+    <div class="subnav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#empathise">Empathise</a>
+      <a href="#define">Define</a>
+      <a href="#ideate">Ideate</a>
+      <a href="#design">Design</a>
+      <a href="#screens">Screens</a>
+      <a href="#next">Next Steps</a>
+      <a href="#learnings">Learnings</a>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- ============ 1 · HERO ============ -->
+  <section class="hero">
+    <!-- CSS/SVG baklava-tray watermark -->
+    <svg class="hero-mark" viewBox="0 0 320 200" fill="none" aria-hidden="true">
+      <ellipse cx="160" cy="150" rx="130" ry="34" fill="currentColor"/>
+      <ellipse cx="160" cy="138" rx="130" ry="34" fill="rgba(0,0,0,0.3)"/>
+      <g fill="currentColor">
+        <path d="M70 120 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M118 120 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M166 120 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M214 120 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M94 96 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M142 96 l22 -22 l22 22 l-22 22 z"/>
+        <path d="M190 96 l22 -22 l22 22 l-22 22 z"/>
+      </g>
+    </svg>
+
+    <div class="wrap">
+      <span class="lm-index reveal">04 · Case Study · Shatila</span>
+      <h1 class="mega reveal d1">
+        <span class="l">Shatila</span>
+        <span class="l l-accent">BAKERY</span>
+        <span class="l l-ghost">FACTORY</span>
+      </h1>
+      <p class="lede reveal d2">A staff operations dashboard for a 40-year-old Lebanese-American sweets factory in Dearborn, Michigan — moving from phone calls and paper to its first digital system. An end-to-end UX/UI case study.</p>
+
+      <div class="meta reveal d3">
+        <div><span class="k">Role</span><span class="v">UI/UX Designer</span></div>
+        <div><span class="k">Tools</span><span class="v">Figma Make · React</span></div>
+        <div><span class="k">Status</span><span class="v">Active Project</span></div>
+        <div><span class="k">Location</span><span class="v">Dearborn, Michigan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 2 · OVERVIEW ============ -->
+  <section id="overview">
+    <div class="wrap">
+      <span class="lm-index reveal">00 · Overview</span>
+      <h2 class="big reveal">A craft factory, run for 40 years without a screen.</h2>
+
+      <div class="grid grid-2 reveal d1" style="margin-top: var(--sp-7); align-items: start;">
+        <div>
+          <p>Shatila is a Lebanese-American sweets factory based in Dearborn, Michigan, specialising in custom, large-quantity dessert orders for events, retailers and wholesale clients. Family-run and operating for more than 40 years, the factory built its reputation on craft and consistency.</p>
+          <p>But its order operations still run entirely on phone calls and paper. This case study covers the design of the first digital system to support the factory's day-to-day staff workflow — capturing orders, tracking their status, and giving every team one shared source of truth.</p>
+        </div>
+        <div class="grid grid-2" style="gap: var(--sp-5);">
+          <div class="card"><span class="k" style="font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:var(--sp-2);">Business Type</span><strong>Lebanese-American sweets factory</strong></div>
+          <div class="card"><span class="k" style="font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:var(--sp-2);">Location</span><strong>Dearborn, Michigan</strong></div>
+          <div class="card"><span class="k" style="font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:var(--sp-2);">Order Type</span><strong>Custom, large-quantity</strong></div>
+          <div class="card"><span class="k" style="font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:var(--sp-2);">Team Size</span><strong>Multi-team factory floor</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 3 · THE PROBLEM ============ -->
+  <section id="problem">
+    <div class="wrap">
+      <span class="lm-index reveal">01 · The Problem <span class="dt-tag">— Empathize</span></span>
+      <div class="pull reveal" style="margin-bottom: var(--sp-8);">
+        <p>A factory running for 40 years on phone calls and paper — with no digital system at all.</p>
+      </div>
+
+      <div class="grid grid-2 reveal d1">
+        <div class="card ghost-card">
+          <span class="ghost-num">01</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <h3>Orders Lost</h3>
+          <p>During peak season, orders taken by phone fell through the gap between being recorded and being acted on.</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">02</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+          <h3>No Visibility</h3>
+          <p>Management had no way to see the status of all active orders without physically walking to each team.</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">03</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <h3>Too Slow for Christmas</h3>
+          <p>Christmas volume exceeded what the manual process could reliably handle.</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">04</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <h3>Details Getting Wrong</h3>
+          <p>Custom specifications passed verbally between staff lost critical details before reaching production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 4 · EMPATHISE ============ -->
+  <section id="empathise">
+    <div class="wrap">
+      <span class="lm-index reveal">02 · Empathise <span class="dt-tag">— Empathize</span></span>
+      <h2 class="big reveal">Primary research: client conversations.</h2>
+      <p class="reveal d1">With no existing system or documentation to audit, a series of direct conversations with the stakeholder became the primary research method — reconstructing how the factory actually works, order by order, and triangulating it against the wider category.</p>
+
+      <h3 class="reveal" style="margin-top: var(--sp-9);">Research methods</h3>
+      <div class="grid grid-5 reveal d1">
+        <div class="card method"><span class="m-no">01</span><span class="m-name">Client Interviews</span></div>
+        <div class="card method"><span class="m-no">02</span><span class="m-name">Workflow Reconstruction</span></div>
+        <div class="card method"><span class="m-no">03</span><span class="m-name">Competitive Audit</span></div>
+        <div class="card method"><span class="m-no">04</span><span class="m-name">Forum Research</span></div>
+        <div class="card method"><span class="m-no">05</span><span class="m-name">Secondary Research</span></div>
+      </div>
+
+      <h3 class="reveal" style="margin-top: var(--sp-9);">Key findings</h3>
+      <div class="grid grid-2 reveal d1">
+        <div class="card"><span class="finding-tag">F1</span><h3 style="font-size:1.15rem;">Phone-first intake</h3><p>Nearly every order begins as a phone call, captured on paper and never entered into any shared system.</p></div>
+        <div class="card"><span class="finding-tag">F2</span><h3 style="font-size:1.15rem;">Status lives in people's heads</h3><p>The true state of an order is only known by whoever last touched it, making handoffs fragile and progress invisible.</p></div>
+        <div class="card"><span class="finding-tag">F3</span><h3 style="font-size:1.15rem;">Peak season breaks the process</h3><p>The manual flow that works in normal months collapses under Christmas-level order volume.</p></div>
+        <div class="card"><span class="finding-tag">F4</span><h3 style="font-size:1.15rem;">Custom specs are high-risk</h3><p>The more bespoke an order, the more detail is lost as it moves verbally between sales, warehouse and production.</p></div>
+        <div class="card"><span class="finding-tag">F5</span><h3 style="font-size:1.15rem;">No single source of truth</h3><p>Each team keeps its own informal records, none of which agree with the others.</p></div>
+        <div class="card"><span class="finding-tag">F6</span><h3 style="font-size:1.15rem;">Real appetite for change</h3><p>Staff are frustrated with the current process and ready to adopt a system that genuinely reduces their workload.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 5 · DEFINE ============ -->
+  <section id="define">
+    <div class="wrap">
+      <span class="lm-index reveal">03 · Define <span class="dt-tag">— Define</span></span>
+      <h2 class="big reveal">Three people, one shared order.</h2>
+
+      <div class="grid grid-3 reveal d1" style="margin-top: var(--sp-7);">
+        <div class="card persona" style="--p: var(--accent);">
+          <div class="p-name">Rania</div>
+          <div class="p-meta">42 · Operations Manager</div>
+          <blockquote>"I shouldn't have to walk the floor just to know where an order stands."</blockquote>
+          <h4>Primary Need</h4>
+          <p>A single live view of every active order and its current stage.</p>
+          <h4>Biggest Frustration</h4>
+          <p>Chasing updates from each team by hand, with no reliable overview.</p>
+        </div>
+        <div class="card persona" style="--p: var(--green);">
+          <div class="p-name">Khalid</div>
+          <div class="p-meta">29 · Sales Staff</div>
+          <blockquote>"By the time I write it all down, the customer is already asking the next question."</blockquote>
+          <h4>Primary Need</h4>
+          <p>A fast, structured way to capture custom orders during a phone call.</p>
+          <h4>Biggest Frustration</h4>
+          <p>Re-explaining the same order details to warehouse and production.</p>
+        </div>
+        <div class="card persona" style="--p: var(--amber);">
+          <div class="p-name">Omar</div>
+          <div class="p-meta">35 · Warehouse Staff</div>
+          <blockquote>"Half my mistakes come from specs that changed and nobody told me."</blockquote>
+          <h4>Primary Need</h4>
+          <p>Clear, up-to-date order specs he can trust when fulfilling.</p>
+          <h4>Biggest Frustration</h4>
+          <p>Acting on outdated information passed along verbally.</p>
+        </div>
+      </div>
+
+      <h3 class="reveal" style="margin-top: var(--sp-9);">How might we</h3>
+      <div class="hmw-filters reveal">
+        <button class="hmw-filter active" data-theme="all">All</button>
+        <button class="hmw-filter" data-theme="intake">Intake</button>
+        <button class="hmw-filter" data-theme="visibility">Visibility</button>
+        <button class="hmw-filter" data-theme="handoff">Handoff</button>
+        <button class="hmw-filter" data-theme="scale">Scale</button>
+      </div>
+      <div class="hmw-cloud reveal d1">
+        <div class="hmw" data-theme="intake"><span class="hmw-theme">Intake</span>How might we capture phone orders quickly without losing custom detail?</div>
+        <div class="hmw" data-theme="visibility"><span class="hmw-theme">Visibility</span>How might we give management a live view of every active order?</div>
+        <div class="hmw" data-theme="handoff"><span class="hmw-theme">Handoff</span>How might we make order handoffs between teams reliable and traceable?</div>
+        <div class="hmw" data-theme="scale"><span class="hmw-theme">Scale</span>How might we keep the system usable under peak Christmas volume?</div>
+        <div class="hmw" data-theme="visibility"><span class="hmw-theme">Visibility</span>How might we create one source of truth all teams can trust?</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 6 · IDEATE ============ -->
+  <section id="ideate">
+    <div class="wrap">
+      <span class="lm-index reveal">04 · Ideate <span class="dt-tag">— Ideate</span></span>
+      <h2 class="big reveal">From findings to direction.</h2>
+
+      <h3 class="reveal" style="margin-top: var(--sp-8);">Design principles</h3>
+      <div class="grid grid-2 reveal d1">
+        <div class="card ghost-card">
+          <span class="ghost-num">01</span>
+          <h3 style="font-size:1.2rem;">Speed over polish at intake</h3>
+          <p>Order entry must keep pace with a live phone conversation, not slow it down.</p>
+          <p style="font-style:italic;color:var(--ink-faint);font-size:0.82rem;margin-top:var(--sp-3);">Traces to → F1 · Khalid</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">02</span>
+          <h3 style="font-size:1.2rem;">One source of truth</h3>
+          <p>Every team reads and writes to the same order record, never a private copy.</p>
+          <p style="font-style:italic;color:var(--ink-faint);font-size:0.82rem;margin-top:var(--sp-3);">Traces to → F5 · F2</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">03</span>
+          <h3 style="font-size:1.2rem;">Status is always visible</h3>
+          <p>The stage of any order can be seen without asking a person where it is.</p>
+          <p style="font-style:italic;color:var(--ink-faint);font-size:0.82rem;margin-top:var(--sp-3);">Traces to → F2 · Rania</p>
+        </div>
+        <div class="card ghost-card">
+          <span class="ghost-num">04</span>
+          <h3 style="font-size:1.2rem;">Built for peak load</h3>
+          <p>The flow has to hold up at Christmas volume, not just on an average day.</p>
+          <p style="font-style:italic;color:var(--ink-faint);font-size:0.82rem;margin-top:var(--sp-3);">Traces to → F3</p>
+        </div>
+      </div>
+
+      <h3 class="reveal" style="margin-top: var(--sp-9);">Feature prioritisation · MoSCoW</h3>
+      <div class="matrix reveal d1">
+        <div class="quad q1">
+          <h4>Must Have</h4>
+          <span class="q-sub">Ship-or-it-fails core</span>
+          <div class="feature-pills">
+            <span>Order creation</span><span>Order status tracking</span><span>Customer records</span><span>Staff dashboard home</span>
+          </div>
+        </div>
+        <div class="quad">
+          <h4>Should Have</h4>
+          <span class="q-sub">High value, fast-follow</span>
+          <div class="feature-pills">
+            <span>Order summary review</span><span>Product &amp; inventory list</span><span>Role-based permissions</span>
+          </div>
+        </div>
+        <div class="quad">
+          <h4>Could Have</h4>
+          <span class="q-sub">Valuable if time allows</span>
+          <div class="feature-pills">
+            <span>AI auto-fill entry</span><span>Basic reporting</span><span>Customer issue log</span>
+          </div>
+        </div>
+        <div class="quad">
+          <h4>Next Phase</h4>
+          <span class="q-sub">Deferred, on the roadmap</span>
+          <div class="feature-pills">
+            <span>Production queue</span><span>Mobile &amp; tablet view</span><span>Bilingual UI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 7 · DESIGN DECISIONS ============ -->
+  <section id="design">
+    <div class="wrap">
+      <span class="lm-index reveal">05 · Design Decisions <span class="dt-tag">— Design</span></span>
+      <h2 class="big reveal">Five decisions that shaped the build.</h2>
+
+      <div style="margin-top: var(--sp-8);">
+        <div class="card card--left decision reveal">
+          <div class="d-head"><span class="d-num">01</span>Staff dashboard before admin</div>
+          <div class="d-row"><div class="d-lbl">What happened</div><div class="d-val">Most daily pain lived with front-line staff capturing and moving orders.</div></div>
+          <div class="d-row"><div class="d-lbl">The decision</div><div class="d-val">Design the staff dashboard first, before the admin / management layer.</div></div>
+          <div class="d-row"><div class="d-lbl">What this means</div><div class="d-val">The system delivers value where the work actually happens, fastest.</div></div>
+        </div>
+        <div class="card card--left decision reveal">
+          <div class="d-head"><span class="d-num">02</span>Order Summary Review as a tele-caller tool</div>
+          <div class="d-row"><div class="d-lbl">What happened</div><div class="d-val">Sales staff needed to confirm complex custom orders mid-call.</div></div>
+          <div class="d-row"><div class="d-lbl">The decision</div><div class="d-val">Build an Order Summary Review screen tailored to the tele-caller flow.</div></div>
+          <div class="d-row"><div class="d-lbl">What this means</div><div class="d-val">Fewer mistakes confirmed at the source, before the order moves on.</div></div>
+        </div>
+        <div class="card card--left decision reveal">
+          <div class="d-head"><span class="d-num">03</span>Customer issues before order creation</div>
+          <div class="d-row"><div class="d-lbl">What happened</div><div class="d-val">Repeat customers often called about existing problems, not new orders.</div></div>
+          <div class="d-row"><div class="d-lbl">The decision</div><div class="d-val">Surface customer issues earlier in the flow, ahead of new order creation.</div></div>
+          <div class="d-row"><div class="d-lbl">What this means</div><div class="d-val">Staff resolve the real reason for the call instead of forcing a new order.</div></div>
+        </div>
+        <div class="card card--left decision reveal">
+          <div class="d-head"><span class="d-num">04</span>AI Auto-Fill for data entry</div>
+          <div class="d-row"><div class="d-lbl">What happened</div><div class="d-val">Manual entry was the single biggest drag on intake speed.</div></div>
+          <div class="d-row"><div class="d-lbl">The decision</div><div class="d-val">Introduce AI auto-fill to pre-populate fields from existing data.</div></div>
+          <div class="d-row"><div class="d-lbl">What this means</div><div class="d-val">Staff confirm rather than type, cutting time and entry errors.</div></div>
+        </div>
+        <div class="card card--left decision reveal">
+          <div class="d-head"><span class="d-num">05</span>Role-based permissions in the foundation</div>
+          <div class="d-row"><div class="d-lbl">What happened</div><div class="d-val">Different teams need different access to the same order data.</div></div>
+          <div class="d-row"><div class="d-lbl">The decision</div><div class="d-val">Bake role-based permissions into the foundation, not bolt them on later.</div></div>
+          <div class="d-row"><div class="d-lbl">What this means</div><div class="d-val">The system scales to admin and production roles without a rebuild.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 8 · SCREENS ============ -->
+  <section id="screens">
+    <div class="wrap">
+      <span class="lm-index reveal">06 · What's Designed <span class="dt-tag">— Design</span></span>
+      <h2 class="big reveal">Two dashboards, module by module.</h2>
+
+      <div class="grid grid-2 reveal d1" style="margin-top: var(--sp-7); align-items: start;">
+
+        <div>
+          <div class="screen-head">Staff Dashboard</div>
+          <div class="acc">
+            <button class="acc-btn">Orders <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Order list <span class="pill g">Designed</span></div>
+              <div class="mod-row">Create order <span class="pill g">Designed</span></div>
+              <div class="mod-row">Order summary review <span class="pill g">Designed</span></div>
+              <div class="mod-row">Order status tracking <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Customers <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Customer list <span class="pill g">Designed</span></div>
+              <div class="mod-row">Customer profile <span class="pill g">Designed</span></div>
+              <div class="mod-row">Customer issues <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Products &amp; Inventory <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Product catalogue <span class="pill g">Designed</span></div>
+              <div class="mod-row">Inventory levels <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Reports <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Daily order report <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Settings <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Profile &amp; preferences <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="screen-head">Admin Dashboard</div>
+          <div class="acc">
+            <button class="acc-btn">Orders <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">All orders overview <span class="pill g">Designed</span></div>
+              <div class="mod-row">Order assignment <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Customers <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Customer database <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Products &amp; Inventory <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Product management <span class="pill g">Designed</span></div>
+              <div class="mod-row">Inventory control <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Reports <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Sales reports <span class="pill g">Designed</span></div>
+              <div class="mod-row">Team performance <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+          <div class="acc">
+            <button class="acc-btn">Settings <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <div class="acc-body"><div class="acc-body-inner">
+              <div class="mod-row">Role-based permissions <span class="pill g">Designed</span></div>
+              <div class="mod-row">Staff management <span class="pill g">Designed</span></div>
+            </div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 9 · WHAT COMES NEXT ============ -->
+  <section id="next">
+    <div class="wrap">
+      <span class="lm-index reveal">07 · What Comes Next <span class="dt-tag">— Next Phase</span></span>
+      <h2 class="big reveal">Five priorities for the next phase.</h2>
+
+      <div class="grid grid-3 reveal d1" style="margin-top: var(--sp-7);">
+        <div class="card ghost-card"><span class="ghost-num">1</span><h3 style="font-size:1.2rem;">Role-based home screens</h3><p>Tailor each team's landing view to the tasks that matter most to their role.</p></div>
+        <div class="card ghost-card"><span class="ghost-num">2</span><h3 style="font-size:1.2rem;">Production queue for baking team</h3><p>Give production a live, ordered queue of what to make and when.</p></div>
+        <div class="card ghost-card"><span class="ghost-num">3</span><h3 style="font-size:1.2rem;">Automatic stage handoff notifications</h3><p>Notify the next team automatically as an order moves between stages.</p></div>
+        <div class="card ghost-card"><span class="ghost-num">4</span><h3 style="font-size:1.2rem;">Mobile and tablet view</h3><p>Bring the dashboard to the factory floor on smaller, mobile-first screens.</p></div>
+        <div class="card ghost-card"><span class="ghost-num">5</span><h3 style="font-size:1.2rem;">Bilingual UI — English &amp; Arabic</h3><p>Support the team's languages with a fully bilingual interface.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ 10 · KEY LEARNINGS ============ -->
+  <section id="learnings">
+    <div class="wrap">
+      <span class="lm-index reveal">08 · Key Learnings <span class="dt-tag">— Reflection</span></span>
+      <h2 class="big reveal">What this project taught me.</h2>
+
+      <div class="grid grid-2 reveal d1" style="margin-top: var(--sp-7);">
+        <div class="card learn"><h3>Start where the pain is, not where the org chart is.</h3><p>Designing the staff dashboard before the admin layer meant the people doing the most repetitive, error-prone work felt the benefit first — giving the project early momentum and buy-in.</p></div>
+        <div class="card learn"><h3>When there's no system, conversations are the data.</h3><p>With no documentation or software to audit, structured client conversations became the entire research foundation. Reconstructing the workflow by listening carefully beat any template.</p></div>
+        <div class="card learn"><h3>Speed of entry is a design problem, not a willpower one.</h3><p>Staff weren't slow — the process was. Treating fast, structured intake as a core constraint reframed AI auto-fill and order review from nice-to-haves into the heart of the solution.</p></div>
+        <div class="card learn"><h3>Foundations decide what's possible later.</h3><p>Building role-based permissions in early kept the door open for admin, production and mobile phases without forcing a costly rebuild down the line.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ MORE WORK ============ -->
+  <section>
+    <div class="wrap">
+      <span class="lm-index reveal">More work</span>
+      <h2 class="big reveal">Other case studies</h2>
+      <div class="grid grid-2 reveal d1" style="margin-top: var(--sp-6);">
+        <a class="card cs-card" href="tractor-case-study.html">
+          <span class="kicker">05 · Case Study</span>
+          <h3>Tractor Connect 2.0</h3>
+          <p>An end-to-end redesign of a connected tractor app for farmers who work with their hands, not their phones.</p>
+          <span class="cs-link">Explore the build →</span>
+        </a>
+        <a class="card cs-card" href="invoice-platform.html">
+          <span class="kicker">03 · Case Study</span>
+          <h3>Invoice Platform</h3>
+          <p>A complete financial dashboard system — React 19, MUI, real-time status flows. From tangled spreadsheets to a calm, considered product.</p>
+          <span class="cs-link">Explore the build →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <a class="big-cta reveal" href="index.html#shatila">← Back to <span class="accent">work</span></a>
+    <p class="subline reveal d1">Shatila Bakery Factory · Staff Dashboard · UX/UI Case Study · Designer: <span class="metric">Dayal</span> · Active Project · DAYAL·WORLD</p>
+    <p class="disclaimer reveal d1">Note: this is an active, in-progress project. Personas, quotes and figures shown here are illustrative placeholders and will be replaced with final content. Presented for portfolio purposes only.</p>
+    <p class="built reveal d1">Built with ❤️ and a lot of baklava</p>
+  </footer>
+
+  </main>
+
+  <button id="to-top" class="to-top" aria-label="Back to top" title="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+  </button>
+
+  <script>
+  /* ---- scroll reveal ---- */
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+
+  /* ---- section sub-nav: active highlight on scroll ---- */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.subnav a'));
+    if (!links.length) return;
+    var sections = links
+      .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+      .filter(Boolean);
+
+    function setActive(id) {
+      links.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+    // keep the active link in view inside the scrollable sub-nav (mobile)
+    function scrollLinkIntoView(id) {
+      var link = links.filter(function (a) { return a.getAttribute('href') === '#' + id; })[0];
+      if (link && link.scrollIntoView) {
+        link.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { setActive(en.target.id); scrollLinkIntoView(en.target.id); }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+  })();
+
+  /* ---- accordion (Screens) ---- */
+  (function () {
+    document.querySelectorAll('.acc-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var acc = btn.closest('.acc');
+        var body = acc.querySelector('.acc-body');
+        var open = acc.classList.toggle('open');
+        body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
+      });
+    });
+  })();
+
+  /* ---- HMW tag-cloud filter ---- */
+  (function () {
+    var filters = document.querySelectorAll('.hmw-filter');
+    var tags = document.querySelectorAll('.hmw');
+    filters.forEach(function (f) {
+      f.addEventListener('click', function () {
+        filters.forEach(function (x) { x.classList.remove('active'); });
+        f.classList.add('active');
+        var theme = f.getAttribute('data-theme');
+        tags.forEach(function (t) {
+          var match = (theme === 'all' || t.getAttribute('data-theme') === theme);
+          t.classList.toggle('hide', !match);
+        });
+      });
+    });
+  })();
+
+  /* ---- scroll-to-top button ---- */
+  (function () {
+    var btn = document.getElementById('to-top');
+    if (!btn) return;
+    function onScroll() { btn.classList.toggle('show', window.scrollY > window.innerHeight * 0.8); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    btn.addEventListener('click', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  })();
+  </script>
+</body>
+</html>

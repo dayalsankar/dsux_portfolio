@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice Platform — Case Study · DAYAL·WORLD</title>
+  <meta name="description" content="Case study: a financial invoicing platform — React 19, MUI, real-time status flows. From tangled spreadsheets to a calm, considered product." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#0b0d0a; --bg2:#10130d;
+      --ink:#f4efe6; --ink-dim:rgba(244,239,230,0.62);
+      --accent:#ffcf6b; --accent-deep:#e09a3e;
+      --leaf:#8fc66b; --river:#74c7d6;
+      --line:rgba(255,255,255,0.10);
+      --card:rgba(255,255,255,0.04);
+      --ease:cubic-bezier(0.22,1,0.36,1);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:"Inter",system-ui,sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(116,199,214,0.08), transparent 60%),
+        radial-gradient(900px 500px at 0% 10%, rgba(255,207,107,0.07), transparent 55%),
+        var(--bg);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.6;
+    }
+    a{color:inherit;}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(1.4rem,5vw,3rem);}
+
+    /* ---------- top bar ---------- */
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.1rem clamp(1.4rem,5vw,3rem);
+      background:rgba(11,13,10,0.6);
+      backdrop-filter:blur(12px) saturate(140%);
+      -webkit-backdrop-filter:blur(12px) saturate(140%);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{
+      font-family:"Fraunces",serif;font-weight:600;letter-spacing:0.16em;font-size:0.95rem;
+      display:inline-flex;align-items:center;padding:0.45rem 0.8rem;border-radius:999px;
+      background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);
+      backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.32),inset 0 -1px 0 rgba(255,255,255,0.05),0 8px 30px rgba(0,0,0,0.3);
+      transition:background 0.3s ease,border-color 0.3s ease,transform 0.3s ease;
+    }
+    .brand:hover{background:rgba(255,255,255,0.13);border-color:rgba(255,255,255,0.28);transform:translateY(-1px);}
+    .brand span{opacity:0.5;margin:0 0.2em;}
+    .brand-logo{height:clamp(20px,2.4vw,30px);width:auto;display:block;}
+    .back{
+      font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
+      color:var(--ink-dim);text-decoration:none;transition:color .3s var(--ease);
+    }
+    .back:hover{color:var(--accent);}
+
+    /* ---------- hero ---------- */
+    .hero{padding:clamp(4rem,11vw,8rem) 0 clamp(2.5rem,6vw,4rem);}
+    .kicker{
+      font-size:0.74rem;letter-spacing:0.4em;text-transform:uppercase;
+      color:var(--accent);margin-bottom:1.4rem;
+    }
+    .hero h1{
+      font-family:"Fraunces",serif;font-weight:900;
+      font-size:clamp(2.8rem,9vw,6rem);line-height:0.92;letter-spacing:-0.01em;
+      margin-bottom:1.4rem;
+    }
+    .hero .lede{max-width:46ch;font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--ink-dim);}
+
+    .meta{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;
+      margin-top:3rem;padding-top:2rem;border-top:1px solid var(--line);
+    }
+    .meta .lbl{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:0.5rem;}
+    .meta .val{font-family:"Fraunces",serif;font-size:1.05rem;}
+
+    /* ---------- sections ---------- */
+    section{padding:clamp(2.6rem,6vw,4.5rem) 0;}
+    .sec-index{
+      font-family:"JetBrains Mono",monospace;font-size:0.72rem;letter-spacing:0.2em;
+      color:var(--accent);margin-bottom:0.9rem;
+    }
+    h2{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(1.7rem,4vw,2.8rem);line-height:1.05;margin-bottom:1.2rem;}
+    .body-col{max-width:62ch;}
+    .body-col p + p{margin-top:1rem;}
+    p{color:rgba(244,239,230,0.82);}
+    .muted{color:var(--ink-dim);}
+
+    /* image / screen placeholders */
+    .shot{
+      position:relative;border-radius:16px;border:1px solid var(--line);overflow:hidden;
+      background:linear-gradient(135deg, rgba(116,199,214,0.10), rgba(255,207,107,0.08));
+      aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+    }
+    .shot span{
+      font-family:"JetBrains Mono",monospace;font-size:0.72rem;letter-spacing:0.12em;
+      color:var(--ink-dim);text-align:center;padding:1rem;
+    }
+    .shot.tall{aspect-ratio:4/5;}
+    .shot-lg{margin-top:2rem;}
+    .shots{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem;}
+
+    /* feature cards */
+    .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem;}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;
+      padding:1.6rem;transition:transform .35s var(--ease),border-color .35s,background .35s;
+    }
+    .card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.24);background:rgba(255,255,255,0.07);}
+    .card h3{font-family:"Fraunces",serif;font-weight:600;font-size:1.2rem;margin-bottom:0.5rem;}
+    .card p{font-size:0.92rem;color:var(--ink-dim);}
+    .card .ic{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));margin-bottom:1rem;}
+
+    /* stats */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;}
+    .stat strong{display:block;font-family:"Fraunces",serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.4rem);color:var(--accent);line-height:1;}
+    .stat span{display:block;margin-top:0.5rem;color:var(--ink-dim);font-size:0.9rem;}
+
+    /* tech chips */
+    .chips{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.6rem;}
+    .chip{
+      font-family:"JetBrains Mono",monospace;font-size:0.8rem;
+      padding:0.45rem 0.85rem;border:1px solid var(--line);border-radius:999px;
+      background:var(--card);color:var(--ink);
+    }
+
+    /* callout / placeholder note */
+    .note{
+      margin-top:1.4rem;font-family:"JetBrains Mono",monospace;font-size:0.72rem;
+      color:var(--accent-deep);opacity:0.8;
+    }
+
+    /* footer CTA */
+    .end{
+      text-align:center;padding:clamp(4rem,9vw,7rem) 0;border-top:1px solid var(--line);margin-top:2rem;
+    }
+    .end h2{font-size:clamp(2rem,6vw,3.6rem);}
+    .cta{
+      display:inline-block;margin-top:1.6rem;background:var(--accent);color:#1a1407;
+      font-weight:600;text-decoration:none;padding:0.85rem 1.8rem;border-radius:999px;
+      transition:transform .3s var(--ease),box-shadow .3s;
+    }
+    .cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,207,107,0.25);}
+    .foot{margin-top:2.5rem;font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim);}
+    .foot a{color:var(--river);text-decoration:none;}
+
+    /* reveal on scroll */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+    .reveal.in{opacity:1;transform:none;}
+
+    @media (max-width:780px){
+      .meta{grid-template-columns:1fr 1fr;}
+      .feature-grid,.stats,.shots{grid-template-columns:1fr;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .reveal{opacity:1;transform:none;transition:none;}
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="UX.DS — DAYAL·WORLD">
+      <img class="brand-logo" src="assets/UX.DS_white.svg" alt="UX.DS" />
+    </a>
+    <a class="back" href="index.html">← Back to the world</a>
+  </header>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <header class="hero reveal">
+      <div class="kicker">03 — Case Study</div>
+      <h1>Invoice Platform</h1>
+      <p class="lede">A complete financial dashboard system — turning tangled spreadsheets and scattered approvals into a calm, considered product where every invoice has a clear state and a clear next step.</p>
+
+      <div class="meta">
+        <div><div class="lbl">Role</div><div class="val">Product Design &amp; Frontend</div></div>
+        <div><div class="lbl">Timeline</div><div class="val">[ duration ]</div></div>
+        <div><div class="lbl">Platform</div><div class="val">Web app</div></div>
+        <div><div class="lbl">Stack</div><div class="val">React 19 · MUI</div></div>
+      </div>
+    </header>
+
+    <!-- HERO SHOT -->
+    <div class="shot shot-lg reveal">
+      <span>[ Hero screenshot — full dashboard view · replace with image ]</span>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="reveal">
+      <div class="sec-index">01 / Overview</div>
+      <h2>One source of truth for every invoice.</h2>
+      <div class="body-col">
+        <p>Finance teams were tracking invoices across spreadsheets, email threads, and memory — no shared view of what was approved, paid, overdue, or stuck. The platform brings the entire invoice lifecycle into a single, real-time dashboard with explicit status flows, so anyone can see the state of the business at a glance.</p>
+        <p class="muted">The goal wasn't more features — it was clarity. A product that feels quiet, fast, and trustworthy with money on the line.</p>
+      </div>
+    </section>
+
+    <!-- CHALLENGE -->
+    <section class="reveal">
+      <div class="sec-index">02 / The challenge</div>
+      <h2>Spreadsheets don't scale with trust.</h2>
+      <div class="body-col">
+        <p>As volume grew, the manual process broke down: duplicate entries, unclear ownership, missed due dates, and no audit trail. Reconciling status meant pinging people instead of reading a screen.</p>
+        <p>The core problems to solve:</p>
+        <ul style="color:rgba(244,239,230,0.82);margin:0.6rem 0 0 1.1rem;">
+          <li>No shared, real-time view of invoice status.</li>
+          <li>Approval and payment states living in people's heads.</li>
+          <li>Slow, error-prone data entry and search.</li>
+          <li>No confidence in the numbers leadership reported.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="reveal">
+      <div class="sec-index">03 / Approach</div>
+      <h2>Model the states, then design around them.</h2>
+      <div class="body-col">
+        <p>I started from the invoice's lifecycle — defining every state (draft, pending, approved, paid, overdue, disputed) and the transitions between them. That state model became the backbone of the IA, the dashboard, and the component system.</p>
+        <p>From there: a calm visual language (clear typography, restrained color reserved for status), a reusable design system in MUI, and dashboards built around the questions people actually ask.</p>
+      </div>
+      <div class="shots">
+        <div class="shot"><span>[ Status flow / state model diagram ]</span></div>
+        <div class="shot"><span>[ Wireframes / IA exploration ]</span></div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="reveal">
+      <div class="sec-index">04 / What it does</div>
+      <h2>Key features</h2>
+      <div class="feature-grid">
+        <div class="card"><div class="ic"></div><h3>Real-time status flows</h3><p>Every invoice moves through an explicit, color-coded lifecycle — no guessing where anything stands.</p></div>
+        <div class="card"><div class="ic"></div><h3>Live dashboard</h3><p>Totals, aging, and bottlenecks update in real time, so leadership reads the screen instead of asking around.</p></div>
+        <div class="card"><div class="ic"></div><h3>Fast entry &amp; search</h3><p>Streamlined forms, smart defaults, and instant filtering turn data entry from a chore into a few keystrokes.</p></div>
+        <div class="card"><div class="ic"></div><h3>Role-based views</h3><p>Approvers, finance, and admins each see a focused surface tuned to their job.</p></div>
+        <div class="card"><div class="ic"></div><h3>Audit trail</h3><p>Every change is logged and attributable — trust restored to the numbers.</p></div>
+        <div class="card"><div class="ic"></div><h3>Design system</h3><p>A reusable MUI component library keeps the product consistent as it grows.</p></div>
+      </div>
+    </section>
+
+    <!-- SCREENS -->
+    <section class="reveal">
+      <div class="sec-index">05 / Screens</div>
+      <h2>A calm, considered surface.</h2>
+      <div class="shots">
+        <div class="shot tall"><span>[ Invoice list / table view ]</span></div>
+        <div class="shot tall"><span>[ Invoice detail / status timeline ]</span></div>
+      </div>
+      <div class="shot shot-lg"><span>[ Analytics / dashboard overview ]</span></div>
+      <p class="note">// Replace the placeholders above with real product screenshots.</p>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="reveal">
+      <div class="sec-index">06 / Impact</div>
+      <h2>The outcome.</h2>
+      <div class="stats">
+        <div class="stat"><strong>[ — ]</strong><span>faster invoice processing</span></div>
+        <div class="stat"><strong>[ — ]</strong><span>fewer status errors</span></div>
+        <div class="stat"><strong>[ — ]</strong><span>single source of truth</span></div>
+      </div>
+      <p class="note">// Replace bracketed values with real, measured numbers.</p>
+    </section>
+
+    <!-- TECH -->
+    <section class="reveal">
+      <div class="sec-index">07 / Built with</div>
+      <h2>Technology</h2>
+      <div class="chips">
+        <span class="chip">React 19</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">MUI v9</span>
+        <span class="chip">Vite</span>
+        <span class="chip">Real-time data</span>
+        <span class="chip">Design system</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- END / CTA -->
+  <footer class="end">
+    <div class="wrap">
+      <h2 style="font-family:'Fraunces',serif;font-weight:900;">Have a product worth building?</h2>
+      <a class="cta" href="mailto:dayalasankaran@gmail.com">Start a conversation</a>
+      <div class="foot"><a href="index.html">← Back to the world</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // reveal-on-scroll
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),
+      { threshold: 0.18 }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

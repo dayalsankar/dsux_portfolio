@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About · Dayala Sankaran — UX/UI &amp; Product Designer · DAYAL·WORLD</title>
+  <meta name="description" content="Dayala Sankaran — Senior UX/UI & Product Designer. AI-enhanced, enterprise-grade product experiences. Research-led, systems-minded, accessibility-first." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Reuse the home page's design system so this page matches it exactly -->
+  <link rel="stylesheet" href="style.css?v=59" />
+
+  <!-- About-only: a calm, static farmland backdrop (no WebGL) + a few helpers -->
+  <style>
+    /* NIGHT FARM — a dark sky over the fields, the dusk-end of the journey.
+       Midnight sky -> moonlit horizon haze -> dark earth, with a hill silhouette. */
+    .farm-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(120% 60% at 80% 10%, rgba(150,170,210,0.16) 0%, transparent 46%),  /* moon glow */
+        linear-gradient(180deg, #0a1020 0%, #0c1626 38%, #0e1a2c 64%, #0a1422 80%, #05080f 100%);
+    }
+    /* low moonlit haze sitting just behind the hills */
+    .farm-bg::after {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(150% 30% at 50% 84%, rgba(96,128,168,0.22) 0%, transparent 62%);
+    }
+
+    /* starfield — fixed scatter across the upper sky, gentle twinkle */
+    .stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-repeat: no-repeat;
+      background-image:
+        radial-gradient(1.6px 1.6px at 8% 14%, rgba(255,255,255,0.95), transparent),
+        radial-gradient(1.4px 1.4px at 17% 26%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 24% 9%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.2px 1.2px at 31% 20%, rgba(255,255,255,0.85), transparent),
+        radial-gradient(1px 1px at 38% 6%, rgba(255,255,255,0.65), transparent),
+        radial-gradient(1.6px 1.6px at 44% 16%, rgba(255,255,255,0.95), transparent),
+        radial-gradient(1px 1px at 51% 28%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.3px 1.3px at 57% 11%, rgba(255,255,255,0.85), transparent),
+        radial-gradient(1px 1px at 63% 22%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 69% 7%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1.1px 1.1px at 74% 19%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 83% 13%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.4px 1.4px at 90% 25%, rgba(255,255,255,0.85), transparent),
+        radial-gradient(1px 1px at 95% 8%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.2px 1.2px at 13% 38%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 28% 44%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1.3px 1.3px at 47% 40%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 66% 46%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1.2px 1.2px at 86% 42%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 4% 30%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 78% 34%, rgba(255,255,255,0.55), transparent);
+      animation: twinkle 6s ease-in-out infinite;
+    }
+
+    /* a single shooting star — streaks across once on load, then never again */
+    .shooting-star {
+      position: fixed; top: 10%; left: 74%; z-index: 0; pointer-events: none;
+      width: 4px; height: 4px; border-radius: 50%; background: #fff;
+      box-shadow: 0 0 8px 2px rgba(255,255,255,0.85), 0 0 18px 5px rgba(175,200,255,0.4);
+      opacity: 0; animation: shoot 1.5s ease-in 2.2s 1 both;
+    }
+    .shooting-star::before {
+      content: ""; position: absolute; top: 50%; left: 2px; width: 150px; height: 2px;
+      transform-origin: left center; transform: translateY(-50%) rotate(-33deg);
+      background: linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,255,255,0));
+    }
+
+    /* the moon, top-right */
+    .farm-sun {
+      position: fixed; top: 9%; right: 12%; width: clamp(64px, 8vw, 110px); aspect-ratio: 1; z-index: 0; pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 36%, #f4f7ff 0%, #dbe3f3 46%, #aeb9cf 70%, transparent 73%);
+      box-shadow: 0 0 56px 18px rgba(190,205,240,0.18);
+    }
+
+    /* the farm horizon silhouette pinned to the bottom */
+    .farm-horizon {
+      position: fixed; left: 0; bottom: 0; width: 100%; z-index: 0; pointer-events: none;
+      height: clamp(180px, 30vh, 340px); display: block;
+    }
+    .farm-horizon .blades { animation: windmill 14s linear infinite; transform-origin: 1090px 150px; }
+
+    /* gentle vignette to deepen the edges */
+    .farm-scrim {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(120% 100% at 50% 28%, transparent 50%, rgba(0,0,0,0.5) 100%);
+    }
+    /* fireflies drifting up from the dark fields */
+    .motes { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+    .motes i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: rgba(255,224,150,0.95); box-shadow: 0 0 8px 1px rgba(255,206,110,0.8); opacity: 0.5; animation: float 14s linear infinite; }
+    .motes i:nth-child(1){ left: 12%; top: 70%; animation-duration: 16s; }
+    .motes i:nth-child(2){ left: 32%; top: 80%; animation-duration: 19s; animation-delay: -4s; }
+    .motes i:nth-child(3){ left: 54%; top: 75%; animation-duration: 13s; animation-delay: -8s; }
+    .motes i:nth-child(4){ left: 71%; top: 82%; animation-duration: 21s; animation-delay: -2s; }
+    .motes i:nth-child(5){ left: 86%; top: 68%; animation-duration: 17s; animation-delay: -11s; }
+    .motes i:nth-child(6){ left: 45%; top: 88%; animation-duration: 23s; animation-delay: -6s; }
+    @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 12% { opacity: 0.7; } 88% { opacity: 0.7; } 100% { transform: translateY(-62vh) translateX(20px); opacity: 0; } }
+    @keyframes twinkle { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+    @keyframes windmill { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes shoot { 0% { opacity: 0; transform: translate(0, 0); } 8% { opacity: 1; } 100% { opacity: 0; transform: translate(-330px, 214px); } }
+
+    /* ---- Hero field-note strip: three quick facts under the lede ---- */
+    .field-strip { display: flex; gap: var(--sp-7); justify-content: center; flex-wrap: wrap; margin-top: var(--sp-7); }
+    .field-strip .fs { text-align: center; }
+    .field-strip .fs strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: clamp(1.5rem, 3.4vw, 2.2rem); color: var(--accent); line-height: 1; text-shadow: 0 2px 16px rgba(0,0,0,0.45); }
+    .field-strip .fs span { display: block; margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+
+    /* =====================================================================
+       THE JOURNEY — a growing-vine timeline (the creative centrepiece).
+       A golden stem grows as you scroll; milestones unfurl left & right like
+       leaves. Career + education are woven into one path: seed → bloom.
+       ===================================================================== */
+    .journey { position: relative; width: min(940px, 92vw); margin: 0 auto; padding: var(--sp-6) 0 var(--sp-9); }
+    .journey-head { text-align: center; margin-bottom: var(--sp-9); }
+    .journey-head .lm-index { justify-content: center; }
+    .journey-head h2 { margin-top: var(--sp-3); }
+    .journey-sub { margin: var(--sp-3) auto 0; max-width: 46ch; color: var(--ink-dim); font-size: 0.96rem; line-height: 1.7; }
+
+    /* the milestones + vine live in their own track so the line never crosses the heading */
+    .journey-track { position: relative; }
+    /* the vine: a faint track + a bright growing fill driven by scroll */
+    .stem { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: rgba(255,255,255,0.12); border-radius: 2px; z-index: 1; }
+    .stem-grow { position: absolute; left: 0; top: 0; width: 100%; height: 0%; border-radius: 2px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--leaf) 100%);
+      box-shadow: 0 0 14px rgba(255,207,107,0.5); transition: height 0.12s linear; }
+
+    .milestone { position: relative; width: 50%; padding: 0 var(--sp-8); margin-bottom: var(--sp-8);
+      opacity: 0; transform: translateY(26px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+    .milestone.in { opacity: 1; transform: none; }
+    .milestone--l { left: 0; text-align: right; }
+    .milestone--r { left: 50%; text-align: left; }
+
+    /* the leaf-node sitting on the vine */
+    .node { position: absolute; top: 4px; width: 16px; height: 16px; border-radius: 50%; z-index: 2;
+      background: var(--accent); border: 3px solid #1c160a; box-shadow: 0 0 0 4px rgba(255,207,107,0.22);
+      transform: scale(0); transition: transform 0.5s var(--ease) 0.1s; }
+    .milestone.in .node { transform: scale(1); }
+    .milestone--l .node { right: -8px; }
+    .milestone--r .node { left: -8px; }
+    .milestone--study .node { background: var(--leaf); box-shadow: 0 0 0 4px rgba(143,198,107,0.22); }
+
+    .m-when { font-family: "Inter", sans-serif; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-2); }
+    .m-card { display: inline-block; max-width: 100%; text-align: left;
+      background: rgba(20,16,8,0.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.10); border-radius: 16px; padding: var(--sp-5) var(--sp-6);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
+    .m-tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin-bottom: var(--sp-3);
+      border: 1px solid rgba(255,255,255,0.16); color: var(--ink-dim); }
+    .m-tag--work { border-color: rgba(255,207,107,0.5); color: var(--accent); }
+    .m-tag--study { border-color: rgba(143,198,107,0.5); color: var(--leaf); }
+    .m-card h3 { font-family: "Fraunces", serif; font-weight: 600; font-size: clamp(1.1rem, 2vw, 1.45rem); color: var(--ink); line-height: 1.2; }
+    .m-card .org { display: block; color: var(--accent); font-size: 0.84rem; margin: 4px 0 var(--sp-3); }
+    .m-card p { color: var(--ink-dim); font-size: 0.92rem; line-height: 1.65; }
+    .m-stage { display: block; margin-top: var(--sp-3); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--leaf); }
+
+    /* single-column vine on narrow screens */
+    @media (max-width: 720px) {
+      .stem { left: 15px; }
+      .stem-grow { width: 100%; }
+      .milestone, .milestone--l, .milestone--r { width: 100%; left: 0; text-align: left; padding: 0 0 0 46px; }
+      .milestone--l .node, .milestone--r .node { left: 8px; right: auto; }
+    }
+
+    /* contact extras that aren't in the shared sheet */
+    .contact-links { display: flex; gap: var(--sp-7); justify-content: center; flex-wrap: wrap; margin-top: var(--sp-6); font-size: 0.9rem; }
+    .contact-links a { color: var(--ink); border-bottom: 1px solid var(--accent); padding-bottom: 2px; transition: color 0.25s; text-shadow: 0 2px 14px rgba(0,0,0,0.5); }
+    .contact-links a:hover { color: var(--accent); }
+
+    /* skills as soft golden chips inside a card */
+    .chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
+    .chips span { font-size: 0.84rem; padding: 5px 12px; border-radius: 999px; color: var(--ink-dim);
+      border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); }
+    .skill-group { margin-top: var(--sp-5); }
+    .skill-group:first-child { margin-top: var(--sp-4); }
+    .skill-group h4 { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-1); }
+
+    /* ===== Animated gallery — two marquee rows drifting opposite ways ===== */
+    .gallery-head { text-align: center; margin-bottom: var(--sp-8); padding: 0 6vw; }
+    .gallery-head .lm-index { justify-content: center; }
+    .gallery-head h2 { margin-top: var(--sp-3); }
+    .marquee {
+      display: flex; flex-direction: column; gap: var(--sp-4); width: 100%; overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+    .marquee-row { display: flex; gap: var(--sp-4); width: max-content; animation: marq 42s linear infinite; will-change: transform; }
+    .marquee-row--rev { animation-direction: reverse; animation-duration: 52s; }
+    .marquee:hover .marquee-row { animation-play-state: paused; }
+    @keyframes marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .g-item {
+      flex: 0 0 auto; width: clamp(220px, 26vw, 340px); aspect-ratio: 4 / 3;
+      border-radius: 16px; overflow: hidden; position: relative;
+      border: 1px solid rgba(255,255,255,0.10); box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+    }
+    .g-item img { width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: saturate(0.95) brightness(0.9); transition: transform 0.5s var(--ease), filter 0.5s var(--ease); }
+    .g-item:hover img { transform: scale(1.06); filter: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-row { animation: none; }
+      .marquee { overflow-x: auto; }
+      .motes i { animation: none; display: none; }
+      .stars { animation: none; }
+      .shooting-star { display: none; }
+      .farm-horizon .blades { animation: none; }
+      .milestone { opacity: 1; transform: none; }
+      .node { transform: scale(1); }
+      .stem-grow { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Night-farm backdrop: starry sky, moon, hill + windmill silhouette, fireflies -->
+  <div class="farm-bg" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="farm-sun" aria-hidden="true"></div>
+  <svg class="farm-horizon" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <!-- distant back hills -->
+    <path d="M0,320 L0,196 C 240,140 520,166 760,138 C 1000,112 1240,158 1440,128 L1440,320 Z" fill="#0a1422" />
+    <!-- near hills -->
+    <path d="M0,320 L0,232 C 200,188 380,196 560,214 C 760,234 980,182 1200,200 C 1320,210 1440,192 1440,206 L1440,320 Z" fill="#05090f" />
+    <!-- two trees poking above the crest, left -->
+    <g fill="#03060c">
+      <rect x="247" y="176" width="6" height="46" />
+      <ellipse cx="250" cy="170" rx="26" ry="30" />
+      <rect x="402" y="186" width="5" height="40" />
+      <ellipse cx="404" cy="182" rx="20" ry="24" />
+    </g>
+    <!-- windmill on the near hill, right of centre -->
+    <g fill="#03060c">
+      <path d="M1083,300 L1097,300 L1093,150 L1087,150 Z" />            <!-- tower -->
+      <g class="blades">
+        <path d="M1090,150 L1085,100 L1095,100 Z" />                    <!-- up -->
+        <path d="M1090,150 L1140,145 L1140,155 Z" />                    <!-- right -->
+        <path d="M1090,150 L1095,200 L1085,200 Z" />                    <!-- down -->
+        <path d="M1090,150 L1040,155 L1040,145 Z" />                    <!-- left -->
+        <circle cx="1090" cy="150" r="5" />
+      </g>
+    </g>
+  </svg>
+  <div class="farm-scrim" aria-hidden="true"></div>
+  <div class="motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <!-- Scroll progress ribbon (same as home) -->
+  <div id="progress-rail"><span id="progress-fill"></span></div>
+
+  <!-- Phase indicator (same as home) -->
+  <div id="phase-tag" class="phase-tag">
+    <span class="phase-dot"></span>
+    <span id="phase-name">ABOUT</span>
+  </div>
+
+  <!-- Header: identical to the home page -->
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="UX.DS — DAYAL·WORLD">
+      <img class="brand-logo" src="assets/UX.DS_white.svg" alt="UX.DS" />
+    </a>
+    <a class="resume-btn" href="assets/Dayal-Resume.pdf" download="Dayal-Resume.pdf" aria-label="Download my résumé (PDF)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
+      </svg>
+      <span>Download résumé</span>
+    </a>
+  </header>
+
+  <main id="story">
+
+    <!-- HERO -->
+    <section class="panel panel--hero" data-name="ABOUT">
+      <div class="kicker">about me · ux/ui &amp; product designer</div>
+      <h1 class="mega glass">
+        <span class="line">DAYALA</span>
+        <span class="line line--accent">SANKARAN</span>
+      </h1>
+      <p class="lede">Senior UX/UI &amp; Product Designer with 5+ years crafting AI-enhanced, enterprise-grade experiences — research-led, systems-minded, accessibility-first. Based in Chennai.</p>
+      <div class="field-strip">
+        <div class="fs"><strong>5+</strong><span>years designing</span></div>
+        <div class="fs"><strong>40+</strong><span>products shipped</span></div>
+        <div class="fs"><strong>Chennai</strong><span>based · remote-ready</span></div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="panel panel--center" data-name="PROFILE">
+      <div class="landmark-card landmark-card--dark about-card">
+        <div class="lm-index">01 — PROFILE</div>
+        <div class="about-top">
+          <figure class="about-photo">
+            <img src="daya.png?v=2" alt="Dayala Sankaran — portrait" />
+          </figure>
+          <div class="about-intro">
+            <h2 class="big">Products people<br/>feel before they notice.</h2>
+            <p>Over 5+ years I've focused on user-centered design, interaction design, and heuristic evaluation — lately for AI-enhanced products. I build scalable component libraries, define design tokens, and craft flows that simplify complex enterprise platforms.</p>
+          </div>
+        </div>
+
+        <ul class="about-facts">
+          <li><span class="af-k">Track</span><span class="af-v">5+ years · enterprise &amp; AI products · Chennai</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ THE JOURNEY (creative timeline) ============ -->
+    <section class="panel" data-name="THE JOURNEY" style="min-height: auto; padding-top: 12vh; padding-bottom: 8vh;">
+      <div class="journey">
+        <div class="journey-head">
+          <div class="lm-index">02 — THE JOURNEY</div>
+          <h2 class="big">From the workshop floor<br/>to AI-era products.</h2>
+          <p class="journey-sub">Every craft starts as a seed. Scroll to watch the path grow — where I trained, where I built, and how a mechanical-engineering start grew into design.</p>
+        </div>
+
+        <!-- the vine + milestones live in a track that starts BELOW the heading -->
+        <div class="journey-track">
+        <div class="stem" aria-hidden="true"><span class="stem-grow"></span></div>
+
+        <!-- oldest at the top; the vine grows downward to today -->
+        <div class="milestone milestone--l milestone--work">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--work">Work</span>
+            <div class="m-when">2017 — 2018</div>
+            <h3>Cell Leader · LPDC</h3>
+            <span class="org">Sundaram-Clayton (TVS Group)</span>
+            <p>Led die-casting cell operations and daily production targets. The roots: precision, systems thinking, and respect for how things are really made.</p>
+            <span class="m-stage">🌱 The seed</span>
+          </div>
+        </div>
+
+        <div class="milestone milestone--r milestone--study">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--study">Study</span>
+            <div class="m-when">2019</div>
+            <h3>Diploma · Mechanical Engineering</h3>
+            <span class="org">PSN Polytechnic College</span>
+            <p>Engineering fundamentals — tolerance, structure, and problem-solving that still shape how I approach interface systems today.</p>
+          </div>
+        </div>
+
+        <div class="milestone milestone--l milestone--work">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--work">Work</span>
+            <div class="m-when">2020 — 2022</div>
+            <h3>UI/UX Designer</h3>
+            <span class="org">MacappStudio</span>
+            <p>End-to-end UX for Speed Care — a hospital platform spanning Doctor &amp; Patient apps and seven role-based dashboards.</p>
+            <span class="m-stage">🌿 First sprout</span>
+          </div>
+        </div>
+
+        <div class="milestone milestone--r milestone--study">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--study">Study</span>
+            <div class="m-when">2022</div>
+            <h3>B.Sc. Information Technology</h3>
+            <span class="org">Alagappa University</span>
+            <p>Bridged engineering instinct with software thinking — data, logic, and the systems that products are built on.</p>
+          </div>
+        </div>
+
+        <div class="milestone milestone--l milestone--work">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--work">Work</span>
+            <div class="m-when">2022 — Present</div>
+            <h3>Senior UI/UX Designer</h3>
+            <span class="org">Info Services · Chennai</span>
+            <p>AI-integrated workflows for enterprise platforms — cut task time 32% and design-to-dev iteration 40% with a tokenized Figma system.</p>
+            <span class="m-stage">🌳 Full bloom</span>
+          </div>
+        </div>
+
+        <div class="milestone milestone--r milestone--study">
+          <span class="node" aria-hidden="true"></span>
+          <div class="m-card">
+            <span class="m-tag m-tag--study">Study</span>
+            <div class="m-when">2024</div>
+            <h3>Product Designing — Online</h3>
+            <span class="org">Design for Change</span>
+            <p>Sharpening the craft — modern product methods, AI-assisted workflows, and design leadership for the next chapter.</p>
+          </div>
+        </div>
+        </div><!-- /.journey-track -->
+      </div>
+    </section>
+
+    <!-- HOW I WORK (mirrors the home page's "Tools" panel) -->
+    <section class="panel panel--left" data-name="PRINCIPLES">
+      <div class="landmark-card landmark-card--dark">
+        <div class="lm-index">03 — HOW I WORK</div>
+        <h2 class="big">Three things I<br/>never compromise.</h2>
+        <ul class="tool-list">
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Research-led</span>
+            <span class="tool-note-wrap"><span class="tool-note">Contextual inquiry, heuristic evaluation, usability testing, A/B experiments — not guesswork.</span></span>
+          </li>
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Systems, not screens</span>
+            <span class="tool-note-wrap"><span class="tool-note">Scalable component libraries and design tokens that keep every surface in tune.</span></span>
+          </li>
+          <li class="tool" tabindex="0">
+            <span class="tool-name">AI-enhanced &amp; accessible</span>
+            <span class="tool-note-wrap"><span class="tool-note">Intelligent, automated workflows designed for everyone — to WCAG 2.1.</span></span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CAPABILITIES -->
+    <section class="panel panel--right" data-name="TOOLKIT">
+      <div class="landmark-card landmark-card--dark">
+        <div class="lm-index">04 — CAPABILITIES</div>
+        <h2 class="big">The toolkit.</h2>
+        <div class="skill-group">
+          <h4>Design &amp; Prototyping</h4>
+          <div class="chips"><span>Figma</span><span>Auto Layout</span><span>Design Tokens</span><span>Sketch</span><span>Adobe XD</span><span>Photoshop</span><span>Illustrator</span><span>After Effects</span><span>Miro</span></div>
+        </div>
+        <div class="skill-group">
+          <h4>Research &amp; Methods</h4>
+          <div class="chips"><span>UX Research</span><span>Heuristic Evaluation</span><span>Usability Testing</span><span>A/B Testing</span><span>Information Architecture</span><span>Wireframing</span><span>Prototyping</span><span>WCAG 2.1</span><span>Agile</span><span>Maze</span></div>
+        </div>
+        <div class="skill-group">
+          <h4>AI Toolkit</h4>
+          <div class="chips"><span>Claude</span><span>ChatGPT</span><span>Midjourney</span><span>Firefly</span><span>Galileo AI</span><span>Uizard</span><span>Runway</span><span>Spline AI</span><span>v0</span><span>Framer AI</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY (animated marquee · dummy images for now) ============ -->
+    <section class="panel" data-name="GALLERY" style="min-height: auto; padding: 12vh 0;">
+      <div>
+        <div class="gallery-head">
+          <div class="lm-index">05 — THE GALLERY</div>
+          <h2 class="big">Moments from<br/>the journey.</h2>
+        </div>
+
+        <div class="marquee" aria-label="Gallery (placeholder images)">
+          <!-- Row 1 — drifts left. Set is duplicated for a seamless loop. -->
+          <div class="marquee-row">
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a1/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a2/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a3/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a4/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a5/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-a6/600/450" alt="" loading="lazy" /></figure>
+            <!-- duplicate -->
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a1/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a2/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a3/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a4/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a5/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-a6/600/450" alt="" loading="lazy" /></figure>
+          </div>
+
+          <!-- Row 2 — drifts right (reverse). -->
+          <div class="marquee-row marquee-row--rev">
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b1/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b2/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b3/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b4/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b5/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item"><img src="https://picsum.photos/seed/dw-b6/600/450" alt="" loading="lazy" /></figure>
+            <!-- duplicate -->
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b1/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b2/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b3/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b4/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b5/600/450" alt="" loading="lazy" /></figure>
+            <figure class="g-item" aria-hidden="true"><img src="https://picsum.photos/seed/dw-b6/600/450" alt="" loading="lazy" /></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="panel panel--end" data-name="CONTACT">
+      <div class="kicker">let's talk</div>
+      <h2 class="mega">
+        <span class="line">LET'S</span>
+        <span class="line line--accent">BUILD</span>
+      </h2>
+      <p class="lede center">Have a product worth building? I'd love to help you shape it.</p>
+      <a class="cta" href="mailto:dayalasankaran@gmail.com">Start a conversation</a>
+      <div class="contact-links">
+        <a href="mailto:dayalasankaran@gmail.com">dayalasankaran@gmail.com</a>
+        <a href="https://www.linkedin.com/in/dayalasankaran-ux" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div class="foot">Chennai, Tamil Nadu · DAYAL·WORLD</div>
+    </section>
+
+  </main>
+
+  <!-- Scroll affordance (same as home) -->
+  <div id="scroll-hint" class="scroll-hint" aria-hidden="true">
+    <span class="sh-mouse"><span class="sh-wheel"></span></span>
+  </div>
+
+  <script>
+  (function () {
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+    var milestones = Array.prototype.slice.call(document.querySelectorAll('.milestone'));
+    var phaseName = document.getElementById('phase-name');
+    var fill = document.getElementById('progress-fill');
+    var journey = document.querySelector('.journey-track');
+    var grow = document.querySelector('.stem-grow');
+
+    // reveal panels + update the phase tag (same .in mechanism the home page uses)
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          en.target.classList.toggle('in', en.isIntersecting);
+          if (en.isIntersecting && phaseName) {
+            var n = en.target.getAttribute('data-name');
+            if (n) phaseName.textContent = n;
+          }
+        });
+      }, { threshold: 0.25 });
+      panels.forEach(function (p) { io.observe(p); });
+
+      // milestones unfurl one by one as they enter (lower threshold = earlier)
+      var mio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); mio.unobserve(en.target); }
+        });
+      }, { threshold: 0.35 });
+      milestones.forEach(function (m) { mio.observe(m); });
+    } else {
+      panels.forEach(function (p) { p.classList.add('in'); });
+      milestones.forEach(function (m) { m.classList.add('in'); });
+    }
+
+    // the vine grows as the journey section travels through the viewport
+    function growVine() {
+      if (!journey || !grow) return;
+      var r = journey.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var p = (vh * 0.7 - r.top) / (r.height - vh * 0.3);
+      p = Math.min(1, Math.max(0, p));
+      grow.style.height = (p * 100).toFixed(1) + '%';
+    }
+
+    // progress rail follows scroll
+    function onScroll() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      if (fill) fill.style.height = (p * 100).toFixed(1) + '%';
+      growVine();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+
+    // dismiss the scroll hint once travelling
+    var hint = document.getElementById('scroll-hint');
+    function dismiss() {
+      if (!hint) return;
+      hint.style.animation = 'none'; hint.classList.add('gone');
+      window.removeEventListener('scroll', onHint); window.removeEventListener('wheel', dismiss); window.removeEventListener('touchmove', dismiss);
+    }
+    function onHint() { if (window.scrollY > 24) dismiss(); }
+    window.addEventListener('scroll', onHint, { passive: true });
+    window.addEventListener('wheel', dismiss, { passive: true });
+    window.addEventListener('touchmove', dismiss, { passive: true });
+  })();
+  </script>
+
+</body>
+</html>

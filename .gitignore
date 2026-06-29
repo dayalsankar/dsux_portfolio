@@ -1,0 +1,15 @@
+# OS junk
+.DS_Store
+**/.DS_Store
+
+# Heavy design source — full 352-page export (over GitHub's 100MB/file limit).
+# The 27 case-study screens live in image/app-screens/ and in the slim PDF.
+App End user Final.pdf
+
+# Backup archives
+Case study Zip file/
+*.zip
+
+# Local tooling / agent state
+.claude/
+.vscode/

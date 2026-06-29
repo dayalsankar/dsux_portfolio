@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAYAL·WORLD — Design · Build · Grow</title>
+  <meta name="description" content="A surreal interactive portfolio. Journey from golden farmlands to deep forests and flowing rivers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=59" />
+
+  <!-- Intro loader: story + enter button -->
+  <style>
+    /* ===== Loading screen — a warm dawn breaking over the fields ===== */
+    #loader {
+      background:
+        radial-gradient(150% 100% at 50% 118%, rgba(58,104,180,0.16) 0%, transparent 56%),
+        radial-gradient(120% 120% at 50% 26%, #0d1626 0%, #03060d 74%);
+      overflow: hidden;
+    }
+    /* a soft blue glow breathing behind the words */
+    #loader::before {
+      content: ""; position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%);
+      width: min(680px, 94vw); aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle, rgba(130,170,235,0.22) 0%, rgba(90,140,220,0.08) 40%, transparent 66%);
+      filter: blur(12px); animation: loaderGlow 4.6s ease-in-out infinite;
+    }
+    @keyframes loaderGlow { 0%,100% { opacity: 0.65; transform: translate(-50%,-50%) scale(0.95); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.07); } }
+
+    .loader-inner {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 0 5vw; max-width: 860px; margin: 0 auto;
+      animation: loaderRise 0.9s var(--ease) both;
+    }
+    @keyframes loaderRise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+    /* DESIGN · BUILD · GROW — a living gold sheen sweeps across, on one line */
+    .loader-word {
+      white-space: nowrap; font-size: clamp(1.3rem, 5.2vw, 3.6rem); letter-spacing: 0.1em;
+      background: linear-gradient(100deg, var(--accent-deep) 0%, var(--accent) 22%, #fff3d6 38%, var(--accent) 54%, var(--accent-deep) 100%);
+      background-size: 240% 100%;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 6px 30px rgba(96,150,235,0.32));
+      animation: loaderSheen 3.4s linear infinite;
+    }
+    @keyframes loaderSheen { from { background-position: 0% 0; } to { background-position: 240% 0; } }
+
+    .loader-desc {
+      margin: 1.7rem auto 0; text-align: center;
+      color: rgba(244, 239, 230, 0.82); font-size: clamp(0.95rem, 1.5vw, 1.1rem); line-height: 1.85;
+    }
+    .loader-desc .accent { color: var(--accent); }
+
+    /* taller, rounded progress bar with a glowing gradient fill */
+    .loader-bar { height: 3px; border-radius: 999px; background: rgba(255,255,255,0.10); }
+    #loader-fill {
+      border-radius: 999px;
+      background: linear-gradient(90deg, #3f6ea5, var(--river) 60%, #cfeef6);
+      box-shadow: 0 0 12px 1px rgba(120,199,214,0.75);
+    }
+    .loader-sub { animation: loaderRise 1s var(--ease) 0.3s both; }
+
+    /* embers drifting up from the dark fields */
+    .embers { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+    .embers i {
+      position: absolute; bottom: -12px; width: 3px; height: 3px; border-radius: 50%;
+      background: rgba(186,214,255,0.95); box-shadow: 0 0 8px 1px rgba(120,170,235,0.7);
+      opacity: 0; animation: ember linear infinite;
+    }
+    .embers i:nth-child(1){ left: 12%; animation-duration: 7.5s; animation-delay: -1s; }
+    .embers i:nth-child(2){ left: 24%; animation-duration: 9s;   animation-delay: -3s; }
+    .embers i:nth-child(3){ left: 37%; animation-duration: 6.5s; animation-delay: -0.5s; }
+    .embers i:nth-child(4){ left: 49%; animation-duration: 10s;  animation-delay: -4s; }
+    .embers i:nth-child(5){ left: 60%; animation-duration: 7s;   animation-delay: -2s; }
+    .embers i:nth-child(6){ left: 72%; animation-duration: 8.5s; animation-delay: -5s; }
+    .embers i:nth-child(7){ left: 84%; animation-duration: 6.8s; animation-delay: -1.6s; }
+    .embers i:nth-child(8){ left: 92%; animation-duration: 9.5s; animation-delay: -3.4s; }
+    @keyframes ember {
+      0%   { transform: translateY(0) translateX(0) scale(0.7); opacity: 0; }
+      12%  { opacity: 0.95; }
+      85%  { opacity: 0.8; }
+      100% { transform: translateY(-94vh) translateX(28px) scale(1.1); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #loader::before, .loader-word, .loader-inner, .loader-sub { animation: none; }
+      .embers { display: none; }
+      .loader-word { background-position: 30% 0; }
+    }
+  </style>
+
+  <!-- Case-study cards: a small "tools / approach used" row -->
+  <style>
+    .lm-tools { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-5); flex-wrap: wrap; }
+    .lt-label { font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+    .lm-chips { display: flex; gap: 8px; }
+    .lm-chip {
+      position: relative; width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.18);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .lm-chip:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.28); }
+    .lm-chip img, .lm-chip svg { width: 19px; height: 19px; object-fit: contain; display: block; }
+    .lm-chip .lt-name {
+      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) translateY(4px);
+      white-space: nowrap; font-family: "Inter", sans-serif; font-size: 0.64rem; color: var(--ink);
+      background: rgba(10,12,8,0.92); border: 1px solid rgba(255,255,255,0.14);
+      padding: 2px 7px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+    .lm-chip:hover .lt-name { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+
+  <!-- Three.js vendored locally (no CDN dependency, works offline) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js",
+      "three/addons/": "./vendor/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Loading curtain / intro -->
+  <div id="loader">
+    <div class="embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <div class="loader-word">DESIGN · BUILD · GROW</div>
+      <p class="loader-desc">Why a <span class="accent">farm</span> and a <span class="accent">forest</span>?<br/>It's a goal of mine — to one day own land and grow my own.<br/>So this portfolio is built to be <em>travelled</em>, not just read.</p>
+      <div class="loader-bar"><span id="loader-fill"></span></div>
+      <div class="loader-sub">a portfolio you travel…</div>
+    </div>
+  </div>
+
+  <!-- The living world renders here, fixed behind everything -->
+  <canvas id="scene"></canvas>
+
+  <!-- A scroll progress ribbon -->
+  <div id="progress-rail"><span id="progress-fill"></span></div>
+
+  <!-- Phase indicator -->
+  <div id="phase-tag" class="phase-tag">
+    <span class="phase-dot"></span>
+    <span id="phase-name">FARMLANDS</span>
+  </div>
+
+  <!-- Floating top brand -->
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="UX.DS — DAYAL·WORLD">
+      <img class="brand-logo" src="assets/UX.DS_white.svg" alt="UX.DS" />
+    </a>
+    <a class="resume-btn" href="assets/Dayal-Resume.pdf" download="Dayal-Resume.pdf" aria-label="Download my résumé (PDF)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
+      </svg>
+      <span>Download résumé</span>
+    </a>
+  </header>
+
+  <!-- ============ STORY OVERLAY ============ -->
+  <!-- Each .panel is a beat in the journey. Scroll drives both DOM and the 3D camera. -->
+  <main id="story">
+
+    <section class="panel panel--hero" data-phase="0">
+      <div class="kicker">an interactive world · not a website</div>
+      <h1 class="mega glass">
+        <span class="line">PLANTING</span>
+        <span class="line line--accent">IDEAS</span>
+      </h1>
+      <p class="lede">A designer &amp; builder. This is not a page you read — it's a land you travel. Begin in the golden fields where every project starts as a seed.</p>
+    </section>
+
+    <section class="panel panel--right" data-phase="0">
+      <div class="landmark-card">
+        <div class="lm-index">01 — THE FIELDS</div>
+        <h2 class="big">Creativity grows<br/>where it's tended.</h2>
+        <p>Windmills turning, canals running, hills breathing in the distance. The farmland is the craft: patient, deliberate, alive.</p>
+      </div>
+    </section>
+
+    <section class="panel panel--left" data-phase="1">
+      <div class="landmark-card">
+        <div class="lm-index">02 — THE TOOLS</div>
+        <h2 class="big">What I cultivate with.</h2>
+        <ul class="tool-list">
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Product Design</span>
+            <span class="tool-note-wrap"><span class="tool-note">Shaping flows people feel before they notice them.</span></span>
+          </li>
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Design Systems</span>
+            <span class="tool-note-wrap"><span class="tool-note">One language that keeps every screen in tune.</span></span>
+          </li>
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Motion &amp; 3D</span>
+            <span class="tool-note-wrap"><span class="tool-note">Motion with intent — depth, weight, and timing.</span></span>
+          </li>
+          <li class="tool" tabindex="0">
+            <span class="tool-name">Brand &amp; Story</span>
+            <span class="tool-note-wrap"><span class="tool-note">Identity that grows with a team, never freezes.</span></span>
+          </li>
+        </ul>
+
+        <!-- Tool logos: Design + AI stacks -->
+        <div class="tool-wall">
+          <div class="tw-group">
+            <span class="tw-label">Design</span>
+            <ul class="logo-row">
+              <li class="logo" tabindex="0"><img src="vendor/logos/figma.svg" alt="Figma" /><span class="logo-name">Figma</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/sketch.svg" alt="Sketch" /><span class="logo-name">Sketch</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/xd.svg" alt="Adobe XD" /><span class="logo-name">Adobe XD</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/photoshop.svg" alt="Adobe Photoshop" /><span class="logo-name">Photoshop</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/illustrator.svg" alt="Adobe Illustrator" /><span class="logo-name">Illustrator</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/aftereffects.svg" alt="Adobe After Effects" /><span class="logo-name">After Effects</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/premiere.svg" alt="Adobe Premiere Pro" /><span class="logo-name">Premiere Pro</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/spline.svg" alt="Spline" /><span class="logo-name">Spline</span></li>
+            </ul>
+          </div>
+          <div class="tw-group">
+            <span class="tw-label">AI</span>
+            <ul class="logo-row">
+              <li class="logo" tabindex="0"><img src="vendor/logos/chatgpt.svg" alt="ChatGPT" /><span class="logo-name">ChatGPT</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/claude.svg" alt="Claude" /><span class="logo-name">Claude</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/midjourney.svg" alt="Midjourney" /><span class="logo-name">Midjourney</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/firefly.svg" alt="Adobe Firefly" /><span class="logo-name">Firefly</span></li>
+              <li class="logo" tabindex="0"><img src="vendor/logos/runway.svg" alt="Runway" /><span class="logo-name">Runway</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--center" data-phase="2">
+      <h2 class="mega mega--mid glass">
+        <span class="line">CROSSING</span>
+        <span class="line line--accent">INTO THE WILD</span>
+      </h2>
+      <p class="lede center">The cultivated fields give way to something deeper. Curiosity takes over. The forest begins.</p>
+    </section>
+
+    <section id="tractor" class="panel panel--right" data-phase="3">
+      <div class="landmark-card landmark-card--dark">
+        <div class="lm-index">03 — CASE STUDY</div>
+        <h2 class="big">Tractor</h2>
+        <p>A field-ready companion app for tractors — machine health, maintenance schedules, and live telemetry, designed for gloves-on use under bright sun. Shaped the classic way: design-thinking workshops, then crafted in Figma.</p>
+        <div class="lm-tools">
+          <span class="lt-label">Approach</span>
+          <span class="lm-chips">
+            <span class="lm-chip" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+              <span class="lt-name">Design Thinking</span>
+            </span>
+            <span class="lm-chip" tabindex="0"><img src="vendor/logos/figma.svg" alt="Figma" /><span class="lt-name">Figma</span></span>
+          </span>
+        </div>
+        <a class="lm-link" href="tractor-case-study.html">Explore the build →</a>
+      </div>
+    </section>
+
+    <section id="shatila" class="panel panel--left" data-phase="3">
+      <div class="landmark-card landmark-card--dark">
+        <div class="lm-index">04 — CASE STUDY</div>
+        <h2 class="big">Shatila</h2>
+        <p>A 45-year-old family bakery, re-imagined as an AI-powered operations platform — eliminating 60+ hours of manual order entry so one operator can process 900 orders a day. Taken from concept to a working product entirely in Figma Make.</p>
+        <div class="lm-tools">
+          <span class="lt-label">Built with</span>
+          <span class="lm-chips">
+            <span class="lm-chip" tabindex="0"><img src="vendor/logos/figma.svg" alt="Figma Make" /><span class="lt-name">Figma Make</span></span>
+          </span>
+        </div>
+        <a class="lm-link" href="shatila-case-study.html">Explore the build →</a>
+      </div>
+    </section>
+
+    <section class="panel panel--right" data-phase="3">
+      <div class="landmark-card landmark-card--dark">
+        <div class="lm-index">05 — CASE STUDY</div>
+        <h2 class="big">Invoice Platform</h2>
+        <p>A complete financial dashboard system — React 19, MUI, real-time status flows. From tangled spreadsheets to a calm, considered product. Vibe-coded end-to-end with Claude Code and Cursor.</p>
+        <div class="lm-tools">
+          <span class="lt-label">Vibe-coded with</span>
+          <span class="lm-chips">
+            <span class="lm-chip" tabindex="0"><img src="vendor/logos/claude.svg" alt="Claude Code" /><span class="lt-name">Claude Code</span></span>
+            <span class="lm-chip" tabindex="0"><img src="vendor/logos/cursor.svg" alt="Cursor" /><span class="lt-name">Cursor</span></span>
+          </span>
+        </div>
+        <span class="lm-status"><span class="seed"></span>Still growing · coming soon</span>
+      </div>
+    </section>
+
+    <section id="about" class="panel panel--center" data-phase="3">
+      <div class="landmark-card landmark-card--dark about-card">
+        <div class="lm-index">06 — ABOUT ME</div>
+        <div class="about-top">
+          <figure class="about-photo">
+            <img src="daya.png?v=2" alt="Dayal — portrait" />
+          </figure>
+          <div class="about-intro">
+            <h2 class="big">Dayala Sankaran —<br/>UX/UI &amp; product designer.</h2>
+            <p>Senior UX/UI &amp; Product Designer with 5+ years shaping AI-enhanced, enterprise-grade products — user-centered research, scalable component libraries, design tokens, and intuitive flows across complex platforms.</p>
+          </div>
+        </div>
+
+        <ul class="about-facts">
+          <li><span class="af-k">Track</span><span class="af-v">5+ years · enterprise &amp; AI products · Chennai</span></li>
+        </ul>
+
+        <div class="exp">
+          <div class="exp-head">Experience</div>
+          <ol class="exp-list">
+            <li class="exp-row">
+              <div class="exp-when">2022 — Present</div>
+              <div class="exp-what"><strong>Senior UI/UX Designer</strong><span>Info Services · Chennai</span><p>AI-integrated workflows for enterprise platforms — cut task time 32% and design-to-dev iteration 40% with a tokenized Figma system.</p></div>
+            </li>
+            <li class="exp-row">
+              <div class="exp-when">2020 — 2022</div>
+              <div class="exp-what"><strong>UI/UX Designer</strong><span>MacappStudio</span><p>End-to-end UX for Speed Care — a hospital platform spanning Doctor &amp; Patient apps and seven role-based dashboards.</p></div>
+            </li>
+            <li class="exp-row">
+              <div class="exp-when">2017 — 2018</div>
+              <div class="exp-what"><strong>Cell Leader · LPDC</strong><span>Sundaram-Clayton (TVS Group)</span><p>Led die-casting cell operations and daily production targets before moving into design.</p></div>
+            </li>
+          </ol>
+        </div>
+
+        <a class="lm-link" href="about.html">Read more →</a>
+      </div>
+    </section>
+
+    <section class="panel panel--center" data-phase="4">
+      <div class="landmark-card landmark-card--dark center-card">
+        <div class="lm-index">07 — THE RIVER</div>
+        <h2 class="big">Achievements,<br/>carried downstream.</h2>
+        <ul class="stat-row">
+          <li><strong>5+</strong><span>years exploring</span></li>
+          <li><strong>40+</strong><span>products shipped</span></li>
+          <li><strong>∞</strong><span>curiosity</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel panel--end" data-phase="5">
+      <div class="kicker">the journey continues</div>
+      <h2 class="mega">
+        <span class="line">LET'S</span>
+        <span class="line line--accent">EXPLORE</span>
+      </h2>
+      <p class="lede center">Have a world worth building? I'd love to help you plant it.</p>
+      <a class="cta" href="mailto:dayalasankaran@gmail.com">Start a conversation</a>
+      <div class="foot">Built with WebGL · Three.js · and a lot of patience</div>
+    </section>
+
+  </main>
+
+  <!-- Scroll affordance: bottom-center of the hero, vanishes once the journey begins -->
+  <div id="scroll-hint" class="scroll-hint" aria-hidden="true">
+    <span class="sh-mouse"><span class="sh-wheel"></span></span>
+  </div>
+
+  <!-- Audio toggle (ambient, optional) -->
+  <button id="sound-toggle" aria-label="Toggle ambience">
+    <span class="sound-bars"><i></i><i></i><i></i><i></i></span>
+  </button>
+
+  <script type="module" src="main.js?v=84"></script>
+
+  <!-- Dismiss the scroll hint as soon as the user starts travelling -->
+  <script>
+    (function () {
+      var hint = document.getElementById('scroll-hint');
+      if (!hint) return;
+      function dismiss() {
+        hint.style.animation = 'none';   /* release the entrance fill so the fade can run */
+        hint.classList.add('gone');
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('wheel', dismiss);
+        window.removeEventListener('touchmove', dismiss);
+        window.removeEventListener('keydown', onKey);
+      }
+      function onScroll() { if (window.scrollY > 24) dismiss(); }
+      function onKey(e) {
+        if (['ArrowDown', 'PageDown', 'End', ' ', 'Spacebar'].indexOf(e.key) !== -1) dismiss();
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('wheel', dismiss, { passive: true });
+      window.addEventListener('touchmove', dismiss, { passive: true });
+      window.addEventListener('keydown', onKey);
+    })();
+  </script>
+
+  <!-- Deep-link: arriving with a hash (e.g. index.html#tractor) lands on that panel
+       and nudges the 3D camera/progress to match instead of starting at the top. -->
+  <script>
+    (function () {
+      function goToHash() {
+        if (!location.hash) return;
+        var el;
+        try { el = document.querySelector(location.hash); } catch (e) { return; }
+        if (!el) return;
+        el.scrollIntoView();
+        // main.js reads scroll progress from a scroll event — fire one so the
+        // camera, phase, and progress rail jump to this panel.
+        window.dispatchEvent(new Event('scroll'));
+      }
+      // run after layout settles (panels are fixed-height, so a short beat is enough)
+      window.addEventListener('load', function () { setTimeout(goToHash, 80); });
+      window.addEventListener('hashchange', goToHash);
+    })();
+  </script>
+</body>
+</html>
