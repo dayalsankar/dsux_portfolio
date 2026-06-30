@@ -31,6 +31,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Validate AWS configuration
+        run: |
+          echo "AWS CLI:" $(aws --version 2>&1)
+          echo "Checking AWS caller identity..."
+          aws sts get-caller-identity || { echo "ERROR: AWS credentials/config invalid" >&2; exit 1; }
+          if [ -z "${S3_BUCKET}" ]; then
+            echo "ERROR: Required environment variable S3_BUCKET is empty. Set repository secret or variable 'S3_BUCKET'." >&2
+            exit 1
+          fi
+          if [ -z "${CLOUDFRONT_DISTRIBUTION_ID}" ]; then
+            echo "WARNING: CLOUDFRONT_DISTRIBUTION_ID is empty; CloudFront invalidation step may fail." >&2
+          fi
+
       # Static assets (images, js, css, fonts, pdf) — cache hard, they are versioned by content/edits.
       - name: Sync static assets (long cache)
         run: |
