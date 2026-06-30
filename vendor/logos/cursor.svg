@@ -1,7 +1,11 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Cursor — isometric cube mark -->
-  <path d="M50 8 L88 30 L50 52 L12 30 Z" fill="#e8e8e8"/>
-  <path d="M88 30 L88 70 L50 92 L50 52 Z" fill="#bdbdbd"/>
-  <path d="M12 30 L50 52 L50 92 L12 70 Z" fill="#8a8a8a"/>
-  <path d="M50 8 L88 30 L50 52 L12 30 Z M88 30 L88 70 L50 92 L50 52 M12 30 L50 52 L50 92" fill="none" stroke="#5a5a5a" stroke-width="2" stroke-linejoin="round"/>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cursor">
+  <title>Cursor</title>
+  <defs>
+    <linearGradient id="cursorGrad" x1="6" y1="2" x2="18" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EDEDED"/>
+      <stop offset="0.55" stop-color="#B9B9B9"/>
+      <stop offset="1" stop-color="#7C7C7C"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#cursorGrad)" d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/>
 </svg>

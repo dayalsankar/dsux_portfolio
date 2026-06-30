@@ -42,6 +42,7 @@ jobs:
             --exclude ".vscode/*" \
             --exclude "Case study Zip file/*" \
             --exclude "Figma PDF/*" \
+            --exclude "shatila-documentary/*" \
             --exclude "*.md" \
             --exclude "serve.py" \
             --exclude "*.html" \
@@ -56,6 +57,7 @@ jobs:
             --include "*.html" \
             --exclude ".git/*" \
             --exclude ".github/*" \
+            --exclude "shatila-documentary/*" \
             --content-type "text/html; charset=utf-8" \
             --cache-control "public, max-age=0, must-revalidate"
 

@@ -146,6 +146,7 @@
     text-decoration: none; white-space: nowrap;
   }
   .tb-brand span { opacity: 0.45; margin: 0 0.15em; }
+  .tb-brand img { height: clamp(20px, 2.4vw, 28px); width: auto; display: block; }
   .tb-tag {
     justify-self: end;
     font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
@@ -680,7 +681,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
       Back to <span class="accent">farm</span>
     </a>
-    <a class="tb-brand" href="index.html">DAYAL<span>·</span>WORLD</a>
+    <a class="tb-brand" href="index.html" aria-label="DAYAL·WORLD — home"><img src="assets/UX.DS_white.svg" alt="UX.DS" /></a>
     <span class="tb-tag">05 · Case Study</span>
   </header>
 
@@ -814,7 +815,7 @@
       </div>
 
       <figure class="shot reveal d1" style="margin-top: var(--sp-7); width: min(88vw, 1000px);">
-        <img src="image/Tractor%20Stakeholder%20workshop%20synthesis.png?v=2"
+        <img src="image/Tractor%20Stakeholder%20workshop%20synthesis.png?v=3"
              alt="Stakeholder workshop session — aligning on business goals and technical constraints"
              width="1728" height="1117" loading="lazy" />
         <figcaption>Stakeholder workshop synthesis</figcaption>
