@@ -1,2 +1,2 @@
-:HL["/shatila/_next/static/chunks/1uk1b7xkwh0wk.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"jipgoWxZ8SSh4ZGfMLHEJ"}
+:HL["/shatila/_next/static/chunks/1q4uiur9g9kze.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"w23li8jJtiXI7onStsRdZ"}

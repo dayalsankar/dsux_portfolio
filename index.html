@@ -141,6 +141,20 @@
   <!-- A scroll progress ribbon -->
   <div id="progress-rail"><span id="progress-fill"></span></div>
 
+  <!-- Right-side chapter navigator -->
+  <nav class="chapter-rail" aria-label="Chapters">
+    <a href="#p-home"><span class="cr-label">Home</span><span class="cr-dot"></span></a>
+    <a href="#p-fields"><span class="cr-label">The Fields</span><span class="cr-dot"></span></a>
+    <a href="#p-tools"><span class="cr-label">The Tools</span><span class="cr-dot"></span></a>
+    <a href="#p-forest"><span class="cr-label">Into the Wild</span><span class="cr-dot"></span></a>
+    <a href="#tractor"><span class="cr-label">Tractor</span><span class="cr-dot"></span></a>
+    <a href="#shatila"><span class="cr-label">Shatila</span><span class="cr-dot"></span></a>
+    <a href="#p-invoice"><span class="cr-label">Invoice Platform</span><span class="cr-dot"></span></a>
+    <a href="#about"><span class="cr-label">About Me</span><span class="cr-dot"></span></a>
+    <a href="#p-river"><span class="cr-label">The River</span><span class="cr-dot"></span></a>
+    <a href="#p-end"><span class="cr-label">The End</span><span class="cr-dot"></span></a>
+  </nav>
+
   <!-- Phase indicator -->
   <div id="phase-tag" class="phase-tag">
     <span class="phase-dot"></span>
@@ -150,7 +164,7 @@
   <!-- Floating top brand -->
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="UX.DS — DAYAL·WORLD">
-      <img class="brand-logo" src="assets/UX.DS_white.svg" alt="UX.DS" />
+      <img class="brand-logo" src="assets/UX.DS_white logo.png" alt="UX.DS" />
     </a>
     <a class="resume-btn" href="assets/Dayal-Resume.pdf" download="Dayal-Resume.pdf" aria-label="Download my résumé (PDF)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -164,7 +178,7 @@
   <!-- Each .panel is a beat in the journey. Scroll drives both DOM and the 3D camera. -->
   <main id="story">
 
-    <section class="panel panel--hero" data-phase="0">
+    <section id="p-home" class="panel panel--hero" data-phase="0">
       <div class="kicker">an interactive world · not a website</div>
       <h1 class="mega glass">
         <span class="line">PLANTING</span>
@@ -173,7 +187,7 @@
       <p class="lede">A designer &amp; builder. This is not a page you read — it's a land you travel. Begin in the golden fields where every project starts as a seed.</p>
     </section>
 
-    <section class="panel panel--right" data-phase="0">
+    <section id="p-fields" class="panel panel--right" data-phase="0">
       <div class="landmark-card">
         <div class="lm-index">01 — THE FIELDS</div>
         <h2 class="big">Creativity grows<br/>where it's tended.</h2>
@@ -181,7 +195,7 @@
       </div>
     </section>
 
-    <section class="panel panel--left" data-phase="1">
+    <section id="p-tools" class="panel panel--left" data-phase="1">
       <div class="landmark-card">
         <div class="lm-index">02 — THE TOOLS</div>
         <h2 class="big">What I cultivate with.</h2>
@@ -233,7 +247,7 @@
       </div>
     </section>
 
-    <section class="panel panel--center" data-phase="2">
+    <section id="p-forest" class="panel panel--center" data-phase="2">
       <h2 class="mega mega--mid glass">
         <span class="line">CROSSING</span>
         <span class="line line--accent">INTO THE WILD</span>
@@ -256,7 +270,7 @@
             <span class="lm-chip" tabindex="0"><img src="vendor/logos/figma.svg" alt="Figma" /><span class="lt-name">Figma</span></span>
           </span>
         </div>
-        <a class="lm-link" href="tractor-case-study.html">Explore the build →</a>
+        <a class="lm-link" href="tractor/index.html">Explore the build →</a>
       </div>
     </section>
 
@@ -275,7 +289,7 @@
       </div>
     </section>
 
-    <section class="panel panel--right" data-phase="3">
+    <section id="p-invoice" class="panel panel--right" data-phase="3">
       <div class="landmark-card landmark-card--dark">
         <div class="lm-index">05 — CASE STUDY</div>
         <h2 class="big">Invoice Platform</h2>
@@ -330,7 +344,7 @@
       </div>
     </section>
 
-    <section class="panel panel--center" data-phase="4">
+    <section id="p-river" class="panel panel--center" data-phase="4">
       <div class="landmark-card landmark-card--dark center-card">
         <div class="lm-index">07 — THE RIVER</div>
         <h2 class="big">Achievements,<br/>carried downstream.</h2>
@@ -342,7 +356,7 @@
       </div>
     </section>
 
-    <section class="panel panel--end" data-phase="5">
+    <section id="p-end" class="panel panel--end" data-phase="5">
       <div class="kicker">the journey continues</div>
       <h2 class="mega">
         <span class="line">LET'S</span>
@@ -409,6 +423,35 @@
       window.addEventListener('load', function () { setTimeout(goToHash, 80); });
       window.addEventListener('hashchange', goToHash);
     })();
+  </script>
+  <!-- Chapter navigator: active-section tracking + smooth scroll -->
+  <script>
+  (function () {
+    var rail = document.querySelector(".chapter-rail");
+    if (!rail) return;
+    var links = [].slice.call(rail.querySelectorAll("a"));
+    var pairs = links
+      .map(function (a) { return { a: a, sec: document.querySelector(a.getAttribute("href")) }; })
+      .filter(function (p) { return p.sec; });
+    links.forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var t = document.querySelector(a.getAttribute("href"));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      });
+    });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove("active"); });
+            var hit = pairs.find(function (p) { return p.sec === en.target; });
+            if (hit) hit.a.classList.add("active");
+          }
+        });
+      }, { rootMargin: "-45% 0px -45% 0px" });
+      pairs.forEach(function (p) { io.observe(p.sec); });
+    }
+  })();
   </script>
 </body>
 </html>

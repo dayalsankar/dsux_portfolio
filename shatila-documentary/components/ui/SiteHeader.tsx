@@ -14,7 +14,7 @@ export function SiteHeader() {
       </a>
       <a className="tb-brand" href="/" aria-label="DAYAL·WORLD — home">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={asset("/UX.DS_white.svg")} alt="UX.DS" />
+        <img src={asset("/UX.DS_white logo.png")} alt="UX.DS" />
       </a>
       <div
         style={{

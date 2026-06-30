@@ -249,6 +249,17 @@
   <!-- Scroll progress ribbon (same as home) -->
   <div id="progress-rail"><span id="progress-fill"></span></div>
 
+  <!-- Right-side chapter navigator -->
+  <nav class="chapter-rail" aria-label="Chapters">
+    <a href="#a-about"><span class="cr-label">About</span><span class="cr-dot"></span></a>
+    <a href="#a-profile"><span class="cr-label">Profile</span><span class="cr-dot"></span></a>
+    <a href="#a-journey"><span class="cr-label">The Journey</span><span class="cr-dot"></span></a>
+    <a href="#a-principles"><span class="cr-label">How I Work</span><span class="cr-dot"></span></a>
+    <a href="#a-toolkit"><span class="cr-label">Toolkit</span><span class="cr-dot"></span></a>
+    <a href="#a-gallery"><span class="cr-label">Gallery</span><span class="cr-dot"></span></a>
+    <a href="#a-contact"><span class="cr-label">Contact</span><span class="cr-dot"></span></a>
+  </nav>
+
   <!-- Phase indicator (same as home) -->
   <div id="phase-tag" class="phase-tag">
     <span class="phase-dot"></span>
@@ -258,7 +269,7 @@
   <!-- Header: identical to the home page -->
   <header class="topbar">
     <a class="brand" href="index.html" aria-label="UX.DS — DAYAL·WORLD">
-      <img class="brand-logo" src="assets/UX.DS_white.svg" alt="UX.DS" />
+      <img class="brand-logo" src="assets/UX.DS_white logo.png" alt="UX.DS" />
     </a>
     <a class="resume-btn" href="assets/Dayal-Resume.pdf" download="Dayal-Resume.pdf" aria-label="Download my résumé (PDF)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -271,7 +282,7 @@
   <main id="story">
 
     <!-- HERO -->
-    <section class="panel panel--hero" data-name="ABOUT">
+    <section id="a-about" class="panel panel--hero" data-name="ABOUT">
       <div class="kicker">about me · ux/ui &amp; product designer</div>
       <h1 class="mega glass">
         <span class="line">DAYALA</span>
@@ -286,7 +297,7 @@
     </section>
 
     <!-- PROFILE -->
-    <section class="panel panel--center" data-name="PROFILE">
+    <section id="a-profile" class="panel panel--center" data-name="PROFILE">
       <div class="landmark-card landmark-card--dark about-card">
         <div class="lm-index">01 — PROFILE</div>
         <div class="about-top">
@@ -306,7 +317,7 @@
     </section>
 
     <!-- ============ THE JOURNEY (creative timeline) ============ -->
-    <section class="panel" data-name="THE JOURNEY" style="min-height: auto; padding-top: 12vh; padding-bottom: 8vh;">
+    <section id="a-journey" class="panel" data-name="THE JOURNEY" style="min-height: auto; padding-top: 12vh; padding-bottom: 8vh;">
       <div class="journey">
         <div class="journey-head">
           <div class="lm-index">02 — THE JOURNEY</div>
@@ -392,7 +403,7 @@
     </section>
 
     <!-- HOW I WORK (mirrors the home page's "Tools" panel) -->
-    <section class="panel panel--left" data-name="PRINCIPLES">
+    <section id="a-principles" class="panel panel--left" data-name="PRINCIPLES">
       <div class="landmark-card landmark-card--dark">
         <div class="lm-index">03 — HOW I WORK</div>
         <h2 class="big">Three things I<br/>never compromise.</h2>
@@ -414,7 +425,7 @@
     </section>
 
     <!-- CAPABILITIES -->
-    <section class="panel panel--right" data-name="TOOLKIT">
+    <section id="a-toolkit" class="panel panel--right" data-name="TOOLKIT">
       <div class="landmark-card landmark-card--dark">
         <div class="lm-index">04 — CAPABILITIES</div>
         <h2 class="big">The toolkit.</h2>
@@ -434,7 +445,7 @@
     </section>
 
     <!-- ============ GALLERY (animated marquee · dummy images for now) ============ -->
-    <section class="panel" data-name="GALLERY" style="min-height: auto; padding: 12vh 0;">
+    <section id="a-gallery" class="panel" data-name="GALLERY" style="min-height: auto; padding: 12vh 0;">
       <div>
         <div class="gallery-head">
           <div class="lm-index">05 — THE GALLERY</div>
@@ -480,7 +491,7 @@
     </section>
 
     <!-- CONTACT -->
-    <section class="panel panel--end" data-name="CONTACT">
+    <section id="a-contact" class="panel panel--end" data-name="CONTACT">
       <div class="kicker">let's talk</div>
       <h2 class="mega">
         <span class="line">LET'S</span>
@@ -571,5 +582,34 @@
   })();
   </script>
 
+  <!-- Chapter navigator: active-section tracking + smooth scroll -->
+  <script>
+  (function () {
+    var rail = document.querySelector(".chapter-rail");
+    if (!rail) return;
+    var links = [].slice.call(rail.querySelectorAll("a"));
+    var pairs = links
+      .map(function (a) { return { a: a, sec: document.querySelector(a.getAttribute("href")) }; })
+      .filter(function (p) { return p.sec; });
+    links.forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var t = document.querySelector(a.getAttribute("href"));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      });
+    });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove("active"); });
+            var hit = pairs.find(function (p) { return p.sec === en.target; });
+            if (hit) hit.a.classList.add("active");
+          }
+        });
+      }, { rootMargin: "-45% 0px -45% 0px" });
+      pairs.forEach(function (p) { io.observe(p.sec); });
+    }
+  })();
+  </script>
 </body>
 </html>

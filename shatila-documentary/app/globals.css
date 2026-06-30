@@ -197,6 +197,7 @@ html.lenis body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
   color: var(--ink);
   text-decoration: none;
   font-size: 0.82rem;
@@ -218,9 +219,14 @@ html.lenis body {
   display: inline-flex;
 }
 .tb-brand img {
-  height: clamp(20px, 2.4vw, 28px);
+  height: clamp(18px, 2.2vw, 26px);
   width: auto;
   display: block;
+}
+/* the brand wordmark ships white-on-transparent — invert it on the light
+   theme so it stays legible on the cream canvas */
+:root[data-theme="light"] .tb-brand img {
+  filter: brightness(0);
 }
 .tb-tag {
   justify-self: end;

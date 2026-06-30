@@ -1,4 +1,4 @@
-import { ScrollProgress } from "@/components/ui/Chrome";
+import { ScrollProgress, SideNav } from "@/components/ui/Chrome";
 import { SiteHeader } from "@/components/ui/SiteHeader";
 import { Hero } from "@/components/sections/Hero";
 import { Summary, Story, Context, Problem } from "@/components/sections/Opening";
@@ -31,6 +31,7 @@ export default function Home() {
     <>
       <ScrollProgress />
       <SiteHeader />
+      <SideNav />
       <main>
         {/* Act I — The opening */}
         <Hero />
