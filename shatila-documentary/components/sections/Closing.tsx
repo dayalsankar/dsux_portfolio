@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { Reveal, Stagger, staggerItem } from "@/components/ui/Reveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { tech, impact, reflection, roadmap, takeaways } from "@/lib/content";
+import { tech, impact, reflection, roadmap, takeaways, testimonials } from "@/lib/content";
 
 /* ---------------- Prototype ---------------- */
 export function Prototype() {
@@ -214,6 +214,55 @@ export function Roadmap() {
                 </div>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed" style={{ color: "var(--ink-dim)" }}>{r.text}</p>
               </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Testimonials ---------------- */
+export function Testimonials() {
+  return (
+    <section id="voices" className="section">
+      <div className="wrap">
+        <SectionHeader
+          index="22"
+          kicker="Voices"
+          title="What the team says."
+          lead="Illustrative placeholder quotes for this active project — to be replaced with final client testimonials."
+        />
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <Reveal key={t.name} delay={i * 0.06}>
+              <figure className="card flex h-full flex-col p-8">
+                <span
+                  aria-hidden
+                  className="mb-3 block text-5xl leading-[0.4]"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--amber)", opacity: 0.6 }}
+                >
+                  &ldquo;
+                </span>
+                <blockquote
+                  className="text-[0.98rem] leading-relaxed"
+                  style={{ fontFamily: "var(--font-display)", fontWeight: 320, color: "var(--ink)" }}
+                >
+                  {t.quote}
+                </blockquote>
+                <figcaption className="mt-6 flex items-center gap-3">
+                  <span
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-semibold"
+                    style={{ background: "var(--amber)", color: "#0c0a08", fontFamily: "var(--font-label)" }}
+                  >
+                    {t.initials}
+                  </span>
+                  <span className="flex flex-col leading-tight">
+                    <span className="text-sm font-medium" style={{ color: "var(--ink)" }}>{t.name}</span>
+                    <span className="text-xs" style={{ color: "var(--ink-dim)" }}>{t.role}</span>
+                  </span>
+                </figcaption>
+              </figure>
             </Reveal>
           ))}
         </div>

@@ -32,6 +32,7 @@ export const sections = [
   { id: "impact", label: "Impact" },
   { id: "reflection", label: "Reflection" },
   { id: "roadmap", label: "Roadmap" },
+  { id: "voices", label: "Voices" },
   { id: "takeaways", label: "End" },
 ];
 
@@ -683,6 +684,30 @@ export const roadmap = [
   { n: "04", title: "Mobile & tablet view", text: "Factory-floor workers aren't at desks. Fulfilment and shipping need touch-friendly, readable-in-production interfaces." },
   { n: "05", title: "Bilingual UI — English + Arabic", text: "Dearborn's Arab-American workforce means Arabic is a working language. Critical operational screens should be bilingual, RTL-aware." },
   { n: "06", title: "Analytics & inventory intelligence", text: "Reorder automation, demand forecasting for peak season, and production planning built on real order history." },
+];
+
+export const testimonials = [
+  {
+    quote:
+      "For 45 years our whole business lived in my head and a stack of order slips. The first time I opened the dashboard and saw every order, payment and deadline in one place, it felt like the factory could finally breathe.",
+    name: "Riad Shatila",
+    role: "Owner · Shatila Bakery Factory",
+    initials: "RS",
+  },
+  {
+    quote:
+      "He watched how we actually take orders — the phone calls, the custom specs — and designed around it instead of forcing us to change. Order entry that used to take minutes now takes seconds.",
+    name: "Layla Ahmad",
+    role: "Order Desk · Front Office",
+    initials: "LA",
+  },
+  {
+    quote:
+      "Dayal understood our Christmas-peak chaos and designed for it, not around it. The AR aging and role-based views mean I finally trust the numbers I report to the family.",
+    name: "Nadia Hassan",
+    role: "Finance & Accounts",
+    initials: "NH",
+  },
 ];
 
 export const takeaways = {

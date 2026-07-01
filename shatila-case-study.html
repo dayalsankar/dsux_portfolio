@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shatila Bakery Factory · Staff Dashboard · UX/UI Case Study · DAYAL·WORLD</title>
   <meta name="description" content="A UX/UI case study: designing the first digital staff operations dashboard for Shatila Bakery Factory, a 40-year-old Lebanese-American sweets factory in Dearborn, Michigan." />
+  <link rel="icon" type="image/png" href="UX.DS_Icon_white.png" />
+  <link rel="apple-touch-icon" href="UX.DS_Icon_white.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Oswald:wght@500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -397,6 +399,18 @@
     html { scroll-behavior: auto; }
   }
 
+  /* ----------------------------- testimonials ----------------------------- */
+  .tm-grid { grid-template-columns: repeat(2, 1fr); }
+  .tm { position: relative; }
+  .tm-mark { font-family: "Fraunces", serif; font-size: 2.8rem; line-height: 0.5; color: var(--accent); opacity: 0.55; display: block; }
+  .tm blockquote { margin: var(--sp-3) 0 0; font-family: "Fraunces", serif; font-style: italic; color: var(--ink); font-size: clamp(1.02rem, 1.7vw, 1.22rem); line-height: 1.5; }
+  .tm figcaption { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-6); font-style: normal; }
+  .tm-avatar { width: 44px; height: 44px; border-radius: 50%; flex: none; display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; letter-spacing: 0.04em; color: #241a08; background: linear-gradient(135deg, var(--accent), var(--accent-deep)); }
+  .tm-who { display: flex; flex-direction: column; line-height: 1.3; }
+  .tm-name { font-weight: 600; font-size: 0.95rem; color: var(--ink); }
+  .tm-role { font-size: 0.78rem; color: var(--ink-dim); }
+  @media (max-width: 720px) { .tm-grid { grid-template-columns: 1fr; } }
+
   /* ----------------------------- scroll-to-top ----------------------------- */
   .to-top {
     position: fixed; right: clamp(1rem, 4vw, 2.2rem); bottom: clamp(1rem, 4vw, 2.2rem);
@@ -437,6 +451,7 @@
       <a href="#screens">Screens</a>
       <a href="#next">Next Steps</a>
       <a href="#learnings">Learnings</a>
+      <a href="#voices">Voices</a>
     </div>
   </nav>
 
@@ -862,6 +877,30 @@
         <div class="card learn"><h3>Speed of entry is a design problem, not a willpower one.</h3><p>Staff weren't slow — the process was. Treating fast, structured intake as a core constraint reframed AI auto-fill and order review from nice-to-haves into the heart of the solution.</p></div>
         <div class="card learn"><h3>Foundations decide what's possible later.</h3><p>Building role-based permissions in early kept the door open for admin, production and mobile phases without forcing a costly rebuild down the line.</p></div>
       </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section id="voices">
+    <div class="wrap">
+      <span class="lm-index reveal">09 · Voices <span class="dt-tag">— From the Floor</span></span>
+      <h2 class="big reveal">What the team says.</h2>
+
+      <div class="grid tm-grid reveal d1" style="margin-top: var(--sp-7);">
+        <figure class="card card--glass tm">
+          <span class="tm-mark">“</span>
+          <blockquote>For 40 years we ran everything from memory and paper. The first time I opened the dashboard and saw every order in one place, it felt like the factory could finally breathe.</blockquote>
+          <figcaption><span class="tm-avatar">RS</span><span class="tm-who"><span class="tm-name">Riad Shatila</span><span class="tm-role">Owner · Shatila Bakery Factory</span></span></figcaption>
+        </figure>
+        <figure class="card card--glass tm">
+          <span class="tm-mark">“</span>
+          <blockquote>He sat with us, watched how we actually take orders, and designed around it instead of forcing us to change. Order entry that used to take minutes now takes seconds.</blockquote>
+          <figcaption><span class="tm-avatar">LA</span><span class="tm-who"><span class="tm-name">Layla Ahmad</span><span class="tm-role">Order Desk · Front Office</span></span></figcaption>
+        </figure>
+      </div>
+      <p class="reveal d1" style="margin-top: var(--sp-6); color: var(--ink-faint); font-size: 0.82rem;">Note: illustrative placeholder quotes for this active project — to be replaced with final client testimonials.</p>
     </div>
   </section>
 

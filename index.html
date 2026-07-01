@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DAYAL·WORLD — Design · Build · Grow</title>
+  <title>UXDS</title>
   <meta name="description" content="A surreal interactive portfolio. Journey from golden farmlands to deep forests and flowing rivers." />
+  <link rel="icon" type="image/png" href="UX.DS_Icon_white.png" />
+  <link rel="apple-touch-icon" href="UX.DS_Icon_white.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -113,6 +115,40 @@
     .lm-chip:hover .lt-name { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 
+  <!-- Testimonials — kind words, in the same dark-glass world aesthetic -->
+  <style>
+    .voices-card { max-width: min(760px, 92vw); }
+    .voices-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5);
+      margin-top: var(--sp-7); text-align: left;
+    }
+    .voice {
+      position: relative; padding: var(--sp-6);
+      background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px; backdrop-filter: blur(6px);
+      transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), background 0.4s var(--ease);
+    }
+    .voice:hover { transform: translateY(-4px); border-color: rgba(255,207,107,0.34); background: rgba(255,255,255,0.055); }
+    /* the featured quote spans both columns */
+    .voice--lead { grid-column: 1 / -1; }
+    .voice-mark {
+      font-family: "Fraunces", serif; font-size: 2.6rem; line-height: 0.6;
+      color: var(--accent); opacity: 0.5; display: block; margin-bottom: var(--sp-2);
+    }
+    .voice-quote { color: var(--ink); line-height: 1.65; font-size: 0.98rem; }
+    .voice--lead .voice-quote { font-size: 1.12rem; }
+    .voice-by { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-5); }
+    .voice-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex: none; display: grid; place-items: center;
+      font-family: "Fraunces", serif; font-weight: 600; font-size: 0.92rem; color: #1a1407;
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    }
+    .voice-who { display: flex; flex-direction: column; line-height: 1.3; }
+    .voice-name { font-weight: 600; font-size: 0.9rem; color: var(--ink); }
+    .voice-role { font-size: 0.76rem; color: var(--ink-dim); }
+    @media (max-width: 720px) { .voices-grid { grid-template-columns: 1fr; } }
+  </style>
+
   <!-- Three.js vendored locally (no CDN dependency, works offline) -->
   <script type="importmap">
   {
@@ -151,6 +187,7 @@
     <a href="#shatila"><span class="cr-label">Shatila</span><span class="cr-dot"></span></a>
     <a href="#p-invoice"><span class="cr-label">Invoice Platform</span><span class="cr-dot"></span></a>
     <a href="#about"><span class="cr-label">About Me</span><span class="cr-dot"></span></a>
+    <a href="#p-voices"><span class="cr-label">Kind Words</span><span class="cr-dot"></span></a>
     <a href="#p-river"><span class="cr-label">The River</span><span class="cr-dot"></span></a>
     <a href="#p-end"><span class="cr-label">The End</span><span class="cr-dot"></span></a>
   </nav>
@@ -344,9 +381,42 @@
       </div>
     </section>
 
+    <section id="p-voices" class="panel panel--center" data-phase="3">
+      <div class="landmark-card landmark-card--dark voices-card">
+        <div class="lm-index">07 — KIND WORDS</div>
+        <h2 class="big">What people say<br/>about the work.</h2>
+        <div class="voices-grid">
+          <figure class="voice voice--lead">
+            <span class="voice-mark">“</span>
+            <blockquote class="voice-quote">Dayal has a rare gift for turning tangled, real-world operations into interfaces that feel obvious. He listens first, understands the mess, then quietly designs it away.</blockquote>
+            <figcaption class="voice-by">
+              <span class="voice-avatar">RS</span>
+              <span class="voice-who"><span class="voice-name">Riad Shatila</span><span class="voice-role">Operations Lead · Shatila Bakery</span></span>
+            </figcaption>
+          </figure>
+          <figure class="voice">
+            <span class="voice-mark">“</span>
+            <blockquote class="voice-quote">He shipped a tokenised design system that cut our design-to-dev handoff almost in half. Calm, fast, and dependable under pressure.</blockquote>
+            <figcaption class="voice-by">
+              <span class="voice-avatar">PN</span>
+              <span class="voice-who"><span class="voice-name">Priya Nair</span><span class="voice-role">Product Manager · Info Services</span></span>
+            </figcaption>
+          </figure>
+          <figure class="voice">
+            <span class="voice-mark">“</span>
+            <blockquote class="voice-quote">Working with Dayal feels like the problem is already half-solved. He brings clarity to the messiest briefs and makes the team faster.</blockquote>
+            <figcaption class="voice-by">
+              <span class="voice-avatar">AK</span>
+              <span class="voice-who"><span class="voice-name">Arun Kumar</span><span class="voice-role">Engineering Lead</span></span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <section id="p-river" class="panel panel--center" data-phase="4">
       <div class="landmark-card landmark-card--dark center-card">
-        <div class="lm-index">07 — THE RIVER</div>
+        <div class="lm-index">08 — THE RIVER</div>
         <h2 class="big">Achievements,<br/>carried downstream.</h2>
         <ul class="stat-row">
           <li><strong>5+</strong><span>years exploring</span></li>

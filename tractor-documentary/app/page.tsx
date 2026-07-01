@@ -23,6 +23,7 @@ import {
   Impact,
   Reflection,
   Roadmap,
+  Testimonials,
   Takeaways,
 } from "@/components/sections/Closing";
 
@@ -62,6 +63,7 @@ export default function Home() {
         <Impact />
         <Reflection />
         <Roadmap />
+        <Testimonials />
         <Takeaways />
       </main>
     </>

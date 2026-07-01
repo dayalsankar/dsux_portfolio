@@ -34,6 +34,7 @@ export const sections = [
   { id: "impact", label: "Impact" },
   { id: "reflection", label: "Reflection" },
   { id: "roadmap", label: "Roadmap" },
+  { id: "voices", label: "Voices" },
   { id: "takeaways", label: "End" },
 ];
 
@@ -770,6 +771,30 @@ export const roadmap = [
   { n: "04", title: "Deeper offline sync", text: "Expand cached, write-capable offline flows so more than reads survive a day with no signal — and sync transparently when it returns." },
   { n: "05", title: "Dealer-side companion", text: "A technician view that mirrors the customer's pre-filled context, closing the Carlos loop end to end." },
   { n: "06", title: "Ask Tractor, expanded", text: "Grow the assistant's coverage with image-based fault recognition and guided, step-by-step field fixes." },
+];
+
+export const testimonials = [
+  {
+    quote:
+      "Gloves on, half a signal bar in the back forty — and it still tells me what's actually wrong in plain words, not a code I have to look up later. It earned its place in my cab.",
+    name: "Doug Hensley",
+    role: "Grain Farmer · Saskatchewan",
+    initials: "DH",
+  },
+  {
+    quote:
+      "Severity-first alerts mean my customers call me before a small fault becomes a breakdown. Their pre-filled context lands on my bench and I already know what I'm looking at.",
+    name: "Carlos Mendez",
+    role: "Service Technician · Dealer",
+    initials: "CM",
+  },
+  {
+    quote:
+      "Across a mixed fleet I can finally see maintenance and uptime in one place. Dayal designed for our worst day — the planting-season rush — and it holds up.",
+    name: "Sarah Whitfield",
+    role: "Fleet Manager",
+    initials: "SW",
+  },
 ];
 
 export const takeaways = {
